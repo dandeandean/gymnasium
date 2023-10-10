@@ -36,5 +36,11 @@ int main(int argc, char * argv[]) {
 		printf("%s\n",y);
 		return 0;
 	}
+	char * a = "abc";
+	printf("%s\n",remove_prefix(a,0));
+	a = a+ sizeof(char);
+	printf("%s\n",remove_prefix(a,0));
+	printf("%s\n",remove_prefix(a,2));
+	printf("%s\n",remove_prefix(a,1));
 	return 0;
 }
