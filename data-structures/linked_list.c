@@ -35,14 +35,19 @@ List * list_init(int first_val){
 
 void free_list(List * list){
     /*TODO go through and free all the nodes*/
+    Node * cur = list->head;
+    while (cur != NULL) {
+       free(cur->prev);
+       cur = cur->next;
+    } 
     free(list);
 }
 
 void print_list(List list){
-    printf("|");
-    Node * cur = list.head;
+    printf("(%d)",list.head->value);
+    Node * cur = list.head->next;
     while (cur != NULL) {
-       printf("->(%d)",cur->value);
+       printf("<->(%d)",cur->value);
        cur = cur->next;
     } 
     printf("\n");
