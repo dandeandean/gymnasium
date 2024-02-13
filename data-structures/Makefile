@@ -1,2 +1,2 @@
 all:
-	gcc linked_list.c -o run.out
+	gcc main.c -o run.out

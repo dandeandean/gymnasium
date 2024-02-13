@@ -59,11 +59,3 @@ void add_item(List * list,int value){
     list->size ++;
 }
 
-int main(int argc, char *argv[]){
-    List * plist = list_init(69);
-    print_list(*plist);
-    add_item(plist,420);
-    print_list(*plist);
-    free_list(plist);
-    return 0;
-}
