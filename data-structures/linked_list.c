@@ -34,7 +34,6 @@ List * list_init(int first_val){
 }
 
 void free_list(List * list){
-    /*TODO go through and free all the nodes*/
     Node * cur = list->head;
     while (cur != NULL) {
        free(cur->prev);
@@ -52,6 +51,7 @@ void print_list(List list){
     } 
     printf("\n");
 }
+
 void add_item(List * list,int value){
     Node * new_node = node_init(value,NULL,list->tail);
     list->tail->next = new_node;
@@ -59,3 +59,15 @@ void add_item(List * list,int value){
     list->size ++;
 }
 
+int remove_item(List * list, int value) {
+    Node * cur = list->head;
+    while (cur != NULL) {
+        if (cur->value == value) {
+            cur->prev->next = cur->next;
+            cur->next->prev = cur->prev;
+            free(cur);
+        }
+        cur = cur->next;
+    }
+    return 1;
+}

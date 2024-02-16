@@ -15,6 +15,11 @@ int main(int argc, char *argv[]){
     List * plist = list_init(69);
     print_list(*plist);
     add_item(plist,420);
+    add_item(plist,500);
+    add_item(plist,600);
+    print_list(*plist);
+    remove_item(plist,500);
+    remove_item(plist,700);
     print_list(*plist);
     free_list(plist);
     return 0;
