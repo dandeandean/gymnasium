@@ -1,17 +1,15 @@
+#include "heap.h"
 #include "array_list.h"
+#include <stdlib.h>
 
-typedef struct Node {
-    Node * r_child;
-    Node * l_child;
-    int value;
-} Node;
+Heap *heap_init(int capacity) {
+  Heap *out = (Heap *)malloc(sizeof(Heap));
+  out->list = alinit(capacity);
+  out->depth = 0;
+  out->item_count = 0;
+  return out;
+}
 
-typedef struct {
-    Node * root;
-    int size;
-    int depth;
-} Heap;
+void heap_insert(Heap *h, int val) {}
 
-void add_item(){}
-
-void remove_item(){}
+int heap_pop(Heap *h) { return h->list->data[0]; }
