@@ -12,23 +12,27 @@ ArrayList *alinit(int capacity) {
   return out;
 }
 
-int *double_capacity(ArrayList *al) {
+int *double_capacity_plus_one(ArrayList *al) {
   int *old_data = al->data;
   int old_capacity = al->capacity;
   // move data to new spot
   al->capacity *= 2;
+  al->capacity += 1;
   al->data = (int *)malloc(sizeof(int) * al->capacity);
   // copy over contents
   memcpy(al->data, old_data, sizeof(int) * old_capacity);
   return 0;
 }
 
-void add_item(ArrayList *al, int value) {
+int add_item(ArrayList *al, int value) {
+  int doubled = 0;
   if (al->used + 1 > al->capacity) {
-    double_capacity(al);
+    double_capacity_plus_one(al);
+    doubled = 1;
   }
   al->data[al->used] = value;
   al->used++;
+  return doubled;
 }
 
 void print_al(ArrayList al) {
