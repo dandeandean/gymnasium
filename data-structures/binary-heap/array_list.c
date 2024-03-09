@@ -42,3 +42,16 @@ void print_al(ArrayList al) {
   }
   printf("}\n");
 }
+
+int swap_items(ArrayList *al, int i1, int i2) {
+  if (i1 == i2 || i1 < 0 || i2 < 0) {
+    return -1;
+  }
+  if (i1 > al->used || i2 > al->used) {
+    return -1;
+  }
+  int i1_temp = al->data[i1];
+  al->data[i1] = al->data[i2];
+  al->data[i2] = i1_temp;
+  return 0;
+}

@@ -11,5 +11,5 @@ ArrayList *alinit(int capacity);
 int *double_capacity(ArrayList *al);
 void add_item(ArrayList *al, int value);
 void print_al(ArrayList al);
-
+int swap_items(ArrayList *al, int i1, int i2);
 #endif
