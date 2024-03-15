@@ -1,25 +1,23 @@
 #include "array_list.c"
-#include "array_list.h"
+// #include "array_list.h"
 #include "heap.c"
-#include "heap.h"
+// #include "heap.h"
 
 int main() {
   Heap *h = heap_init(1);
-  ArrayList *al = h->list;
-  add_item(al, 74);
-  add_item(al, 42);
+  heap_insert(h, 3);
 
-  add_item(al, 49);
-  add_item(al, 49);
-
-  add_item(al, 70);
-  swap_items(al, 0, 2);
-
-  add_item(al, 75);
-  add_item(al, 80);
-  add_item(al, 55);
-  // print_al(*al);
   print_heap(*h);
-
+  printf("______\n");
+  heap_insert(h, 2);
+  print_heap(*h);
+  heap_insert(h, 1);
+  printf("______\n");
+  print_heap(*h);
+  heap_insert(h, 4);
+  heap_insert(h, 6);
+  heap_insert(h, 0);
+  printf("______\n");
+  print_heap(*h);
   return 0;
 }

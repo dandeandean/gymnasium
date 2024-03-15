@@ -12,6 +12,7 @@ typedef struct {
   int item_count;
 } Heap;
 
+void min_heapify(Heap *h, int i);
 void heap_insert(Heap *h, int val);
 int heap_pop(Heap *h);
 Heap *heap_init(int capacity);
