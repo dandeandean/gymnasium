@@ -15,6 +15,7 @@ typedef struct {
 void min_heapify(Heap *h, int i);
 void heap_insert(Heap *h, int val);
 int heap_pop(Heap *h);
+int heap_peek(Heap *h);
 Heap *heap_init(int capacity);
 void print_heap(Heap heap);
 #endif

@@ -23,22 +23,32 @@ void min_heapify(Heap *h, int i) {
       left_child < h->item_count) {
     swap_items(h->list, smallest, left_child);
   }
-  printf("smallest: %d, i: %d\n", smallest, i);
   if (smallest != i) {
     min_heapify(h, smallest);
   }
 }
+
 void heap_insert(Heap *h, int val) {
   // h->list->data[h->item_count] = val;
   add_item(h->list, val);
   h->item_count++;
   for (int i = h->item_count / 2; i >= 0; i--) {
-    printf("calling heap on %d...\n", i);
     min_heapify(h, i);
   }
 }
 
-int heap_pop(Heap *h) { return h->list->data[0]; }
+int heap_pop(Heap *h) {
+  int head = heap_peek(h);
+  /* It's a bit janky we keep track of this in two places */
+  h->item_count--;
+  h->list->used--;
+  swap_items(h->list, 0, h->item_count);
+  for (int i = h->item_count / 2; i >= 0; i--) {
+    min_heapify(h, i);
+  }
+  return head;
+}
+int heap_peek(Heap *h) { return h->list->data[0]; }
 
 void print_heap(Heap heap) {
   int twos_cap = 1;
