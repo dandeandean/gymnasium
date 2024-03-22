@@ -1,0 +1,1 @@
+/Users/dandean/git/LEETCODE/algorithms/maximum-number-of-vowels-in-a-substring-of-given-length/target/debug/maximum-number-of-vowels-in-a-substring-of-given-length: /Users/dandean/git/LEETCODE/algorithms/maximum-number-of-vowels-in-a-substring-of-given-length/src/main.rs
