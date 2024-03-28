@@ -1,20 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-#define TRUE 1
-#define FALSE 0
-
-typedef struct Node{
-    int value;
-    struct Node * prev;
-    struct Node * next;
-} Node;
-
-typedef struct{
-    Node * head;
-    Node * tail;
-    int size;
-}List;
+#include "linked_list.h"
 
 Node * node_init(int value, Node * next, Node * prev){
     Node * node = (Node*)malloc(sizeof(Node));

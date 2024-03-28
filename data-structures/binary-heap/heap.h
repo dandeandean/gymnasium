@@ -1,7 +1,8 @@
 #ifndef HEAP_H
 #define HEAP_H
 
-#include "array_list.h"
+#include "../array-list/array_list.h"
+#include "../array-list/array_list.c"
 #include <stdio.h>
 #include <stdlib.h>
 

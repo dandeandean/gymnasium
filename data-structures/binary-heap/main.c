@@ -1,9 +1,5 @@
-#include "array_list.c"
-// #include "array_list.h"
-#include "heap.c"
 #include "heap.h"
-// #include "heap.h"
-
+#include "heap.c"
 int main() {
   Heap *h = heap_init(1);
   heap_insert(h, 3);
@@ -14,7 +10,8 @@ int main() {
   heap_insert(h, 0);
   printf("______\n");
   print_heap(*h);
-  heap_pop(h);
+  int i = heap_pop(h);
+  printf("popped: %d\n",i);
   printf("______\n");
   print_heap(*h);
   return 0;

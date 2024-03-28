@@ -1,6 +1,4 @@
 #include "heap.h"
-#include "array_list.h"
-#include <stdio.h>
 
 Heap *heap_init(int capacity) {
   Heap *out = (Heap *)malloc(sizeof(Heap));
