@@ -12,16 +12,16 @@ ArrayList *alinit(int capacity) {
   return out;
 }
 
-int *double_capacity_plus_one(ArrayList *al) {
-  int *old_data = al->data;
-  int old_capacity = al->capacity;
-  // move data to new spot
-  al->capacity *= 2;
-  al->capacity += 1;
-  al->data = (int *)malloc(sizeof(int) * al->capacity);
-  // copy over contents
-  memcpy(al->data, old_data, sizeof(int) * old_capacity);
-  return 0;
+int double_capacity_plus_one(ArrayList *al) {
+  // realloc
+  al->capacity = 2 * al->capacity + 1;
+  int *temp = (int *)realloc(al->data, sizeof(int) * al->capacity);
+  if (temp == NULL) {
+    // something horrible happened
+    return EXIT_FAILURE;
+  }
+  al->data = temp;
+  return EXIT_SUCCESS;
 }
 
 int add_item(ArrayList *al, int value) {
@@ -49,13 +49,13 @@ void print_al(ArrayList al) {
 
 int swap_items(ArrayList *al, int i1, int i2) {
   if (i1 == i2 || i1 < 0 || i2 < 0) {
-    return -1;
+    return EXIT_FAILURE;
   }
   if (i1 > al->used || i2 > al->used) {
-    return -1;
+    return EXIT_FAILURE;
   }
   int i1_temp = al->data[i1];
   al->data[i1] = al->data[i2];
   al->data[i2] = i1_temp;
-  return 0;
+  return EXIT_SUCCESS;
 }
