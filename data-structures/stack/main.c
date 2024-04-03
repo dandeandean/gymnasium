@@ -1,4 +1,5 @@
 #include "stack.c"
+#include "stack.h"
 #include <stdio.h>
 
 int main(int argc, char **argv) {
@@ -11,6 +12,13 @@ int main(int argc, char **argv) {
   stack_push(s, 9);
   stack_push(s, 4);
   stack_push(s, 2);
+  stack_push(s, 0);
+  stack_print(*s);
+  stack_pop(s);
+  stack_pop(s);
+  stack_pop(s);
+  stack_print(*s);
+  stack_push(s, 0);
   stack_push(s, 0);
   stack_print(*s);
   return 0;
