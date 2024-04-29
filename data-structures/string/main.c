@@ -1,10 +1,12 @@
 #include "strings.c"
+#include "strings.h"
 
 int main() {
-  String *s = string_from("Hello");
+  String *s0 = string_from("Hello");
   String *s1 = string_from("world!");
-  printf("%s\n", s->chars);
-  printf("%d\n", s->len);
-  printf("%c\n", get_ith(s1,9));
+  string_print(*s0);
+  string_print(*s1);
+  String *s3 = string_concat(*s0, *s1);
+  string_print(*s3);
   return 0;
 }

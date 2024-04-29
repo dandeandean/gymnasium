@@ -24,3 +24,19 @@ char get_ith(const String *s, int i) {
   }
   return s->chars[i];
 }
+
+String *string_concat(const String s1, const String s2) {
+  String *s = malloc(sizeof(String));
+  s->chars = malloc(sizeof(char) * (strlen(s1.chars) + strlen(s2.chars)));
+  if (NULL == s) {
+    return NULL;
+  }
+  s->len = strlen(s1.chars) + strlen(s2.chars);
+  memcpy(s->chars, s1.chars, strlen(s1.chars));
+  memcpy(s->chars + strlen(s1.chars), s2.chars, strlen(s2.chars));
+  return s;
+}
+
+void string_print(const String s) {
+  printf("String::{%s, len=%d}\n", s.chars, s.len);
+}
