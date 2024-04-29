@@ -33,10 +33,18 @@ String *string_concat(const String s1, const String s2) {
   }
   s->len = strlen(s1.chars) + strlen(s2.chars);
   memcpy(s->chars, s1.chars, strlen(s1.chars));
-  memcpy(s->chars + strlen(s1.chars), s2.chars, strlen(s2.chars));
+  /* strcpy gives us a NULL terminated string  */
+  strcpy(s->chars + strlen(s1.chars), s2.chars);
   return s;
 }
 
 void string_print(const String s) {
   printf("String::{%s, len=%d}\n", s.chars, s.len);
+}
+
+String *string_split(String *s, int i) {
+  String *sout = string_from(s->chars + i);
+  s->len = i;
+  s->chars[i] = '\0';
+  return sout;
 }
