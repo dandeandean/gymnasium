@@ -21,8 +21,8 @@ impl MinStack {
         self.stack.push(val);
         match self.min {
             None => self.min = Some(val),
-            _ => {
-                if val < self.min.unwrap() {
+            Some(current_min) => {
+                if val < current_min {
                     self.min = Some(val);
                 }
             }
@@ -30,9 +30,7 @@ impl MinStack {
     }
 
     fn pop(&mut self) {
-        let last = self.stack.pop();
-        if last == self.min {
-            // Jank
+        if self.stack.pop() == self.min {
             if self.stack.is_empty() {
                 self.min = None
             } else {
@@ -42,18 +40,24 @@ impl MinStack {
     }
 
     fn top(&self) -> i32 {
-        self.stack.last().unwrap().clone()
+        match self.stack.last() {
+            None => panic!("You called top on an empty stack! That is wrong and immoral"),
+            Some(val) => *val,
+        }
     }
 
     fn get_min(&self) -> i32 {
-        self.min.unwrap()
+        match self.min {
+            None => panic!("You called get min on an empty stack!"),
+            Some(val) => val,
+        }
     }
 }
 fn main() {
     // Your MinStack object will be instantiated and called as such:
     let mut obj = MinStack::new();
-    let val = 69;
-    obj.push(val);
+    obj.push(69);
+    obj.push(420);
     obj.pop();
     let ret_3: i32 = obj.top();
     let ret_4: i32 = obj.get_min();
