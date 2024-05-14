@@ -1,40 +1,28 @@
-fn generate(s: String, n: i32) -> Vec<String> {
-    let mut out: Vec<String> = vec![s.chars().collect()];
+fn generate(n: i32, s: &mut String, out: &mut Vec<String>) {
+    // let mut out: Vec<String> = vec![s.chars().collect()];
     let num_open = s.chars().filter(|c| *c == '(').count() as i32;
-    let mut num_clos = s.chars().filter(|c| *c == ')').count() as i32;
-    if num_open == n {
-        // then we can only add ) to close
-        while num_clos < n {
-            out.push(')'.to_string());
-            num_clos += 1;
-        }
-        // dbg!(&out.join(""), &num_clos, &num_open);
-        return vec![out.join("")];
-    }
-    if num_open == num_clos && num_open == n {
-        // this is a valid one so we can only add (
-        return vec![out.join("")];
+    let num_clos = s.chars().filter(|c| *c == ')').count() as i32;
+    if n == num_clos && num_open == n {
+        out.push(s.clone());
+        return;
     };
     if num_open < n {
-        let mut sl = s.clone();
-        sl.push('(');
-        // dbg!(&sl);
-        out.append(generate(sl, n).as_mut());
+        s.push('(');
+        generate(n, s, out);
+        s.pop();
     }
     if num_clos < num_open {
-        let mut sr = s.clone();
-        sr.push(')');
-        dbg!(&out);
-        out.append(generate(sr, n).as_mut());
-        dbg!(&out);
+        s.push(')');
+        generate(n, s, out);
+        s.pop();
     }
-    out
 }
 pub fn generate_parenthesis(n: i32) -> Vec<String> {
-    let out = generate("".to_string(), n);
+    let mut out: Vec<String> = Vec::new();
+    generate(n, &mut "".to_string(), &mut out);
     out
 }
 fn main() {
-    let res = generate_parenthesis(2);
+    let res = generate_parenthesis(3);
     dbg!(res);
 }
