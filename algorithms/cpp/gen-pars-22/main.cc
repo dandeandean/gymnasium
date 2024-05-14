@@ -29,13 +29,9 @@ private:
 
 int main() {
   Solution *s = new Solution;
-  vector<string> answer = s->generateParenthesis(8);
-  int count = 0;
-  while (!answer.empty()) {
-    cout << answer.back();
-    answer.pop_back();
-    count++;
+  for (int i = 0; i < 9; i++) {
+    vector<string> answer = s->generateParenthesis(i);
+    cout << "n=" << i << " len=" << answer.size() << endl;
   }
-  cout << count;
   return 0;
 }
