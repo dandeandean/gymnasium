@@ -6,12 +6,13 @@ pub fn car_fleet(target: i32, position: Vec<i32>, speed: Vec<i32>) -> i32 {
     pairs.sort();
     pairs.reverse();
     for (start, speed) in pairs {
-        times_left.push((target as f32 - start as f32) / speed as f32);
-        if times_left.len() >= 2 {
-            let last = times_left.get(times_left.len() - 1).unwrap();
-            let second = times_left.get(times_left.len() - 2).unwrap();
-            if last <= second {
-                times_left.pop();
+        let speed_new: f32 = (target as f32 - start as f32) / speed as f32;
+        match times_left.last() {
+            None => times_left.push(speed_new),
+            Some(last) => {
+                if last < &speed_new {
+                    times_left.push(speed_new);
+                }
             }
         }
     }
