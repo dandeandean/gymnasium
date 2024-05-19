@@ -11,9 +11,9 @@ pub fn largest_rectangle_area(heights: Vec<i32>) -> i32 {
         }
         stack.push((start_of_block, h))
     }
-    let len_stack = heights.len();
+    let len_height = heights.len();
     for (i, h) in stack {
-        let thickness = len_stack as i32 - i as i32;
+        let thickness = len_height as i32 - i as i32;
         max_so_far = cmp::max(max_so_far, h * thickness);
     }
     max_so_far
