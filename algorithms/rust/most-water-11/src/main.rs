@@ -1,11 +1,23 @@
+fn calc_area(height: &Vec<i32>, i: usize, j: usize) -> i32 {
+    let cap = core::cmp::min(height[i], height[j]);
+    let dist = (j as i32) - (i as i32);
+    cap * dist
+}
 pub fn max_area(height: Vec<i32>) -> i32 {
     let mut bestsofar = 0;
-    for (left, &h) in height.iter().enumerate() {
-        let right = height.len() - left - 1;
-        let cap = core::cmp::min(h, height[right]) as usize;
-        let dist = height.len() + 1 - left;
-        bestsofar = core::cmp::max(cap * dist, bestsofar);
-        dbg!(&cap, &bestsofar);
+    let (mut left, mut right) = (0, height.len() - 1);
+    while left < right {
+        bestsofar = core::cmp::max(calc_area(&height, left, right), bestsofar);
+        if height[left] > height[right] {
+            right -= 1;
+        }
+        if height[right] > height[left] {
+            left += 1;
+        }
+        if height[right] == height[left] {
+            right -= 1;
+            left += 1;
+        }
     }
     bestsofar as i32
 }
