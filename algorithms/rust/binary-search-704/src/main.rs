@@ -6,6 +6,9 @@ pub fn search(nums: Vec<i32>, target: i32) -> i32 {
             return i as i32;
         }
         if nums[i] > target {
+            if i == 0 {
+                return -1;
+            }
             right = i - 1;
         } else {
             left = i + 1;
@@ -14,6 +17,6 @@ pub fn search(nums: Vec<i32>, target: i32) -> i32 {
     return -1;
 }
 fn main() {
-    let nums = vec![5]; //[-1, 0, 3, 5, 9, 12];
-    dbg!(search(nums, -5));
+    let nums = vec![2, 5]; //[-1, 0, 3, 5, 9, 12];
+    dbg!(search(nums, 0));
 }
