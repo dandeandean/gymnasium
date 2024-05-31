@@ -1,12 +1,16 @@
 pub fn max_profit(prices: Vec<i32>) -> i32 {
-    let (mut best, mut i, mut j) = (0, 0, 1);
-    while j < prices.len() {
-        if prices[i] < prices[j] {
-            best = std::cmp::max(best, prices[j] - prices[i]);
+    let mut left: usize = 0;
+    let mut right: usize = 1;
+    let mut best: i32 = 0;
+    while right < prices.len() {
+        if prices[right] < prices[left] {
+            left = right;
         } else {
-            i = j;
+            //calc POSSIBLE new best
+            best = std::cmp::max(best, prices[right] - prices[left]);
         }
-        j += 1;
+        // window fattens
+        right += 1;
     }
     best
 }
