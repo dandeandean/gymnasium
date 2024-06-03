@@ -10,18 +10,15 @@ impl ListNode {
     }
 }
 pub fn reverse_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-    let mut start: Option<Box<ListNode>> = None;
-    let mut cur: Option<Box<ListNode>> = head;
-    let mut mem: Vec<Option<Box<ListNode>>> = vec![];
-    while cur.is_some() {
-        mem.push(cur.clone());
-        cur = cur
-            .unwrap() // we must be able to unwrap it as we know it's Some from above ^^
-            .next;
+    // from: https://leetcode.com/problems/reverse-linked-list/solutions/4904416/beats-100-full-solution-explained-with-dry-run-java-c-python-rust-javascript-go/
+    let mut dummy = None;
+    let mut current = head;
+    while let Some(mut node) = current {
+        let next = node.next.take();
+        node.next = dummy.take();
+        dummy = Some(node);
+        current = next;
     }
-    while !mem.is_empty() {
-        dbg!(mem.pop());
-    }
-    start
+    dummy
 }
 fn main() {}
