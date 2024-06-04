@@ -1,38 +1,25 @@
 pub fn search_matrix(matrix: Vec<Vec<i32>>, target: i32) -> bool {
-    let (mut left, mut right) = (0, matrix.len() - 1);
-    let mut row_ptr = 0;
+    let nums: Vec<i32> = matrix
+        .iter()
+        .flat_map(|array| array.iter())
+        .cloned()
+        .collect();
+    let (mut left, mut right) = (0, nums.len() - 1);
     while left <= right {
-        let mid = (left + right) / 2;
-        if matrix[mid][0] >= target {
-            right = mid;
-            if right > 0 {
-                right -= 1;
-            } else {
-                return matrix[mid][0] == target;
-            }
-        } else {
-            left = mid + 1;
-        }
-        row_ptr = mid;
-    }
-    let (mut left, mut right) = (0, matrix[row_ptr].len() - 1);
-    while left <= right {
-        let mid = (left + right) / 2;
-        if matrix[row_ptr][mid] == target {
+        let i = (left + right) / 2;
+        if nums[i] == target {
             return true;
         }
-        if matrix[row_ptr][mid] > target {
-            right = mid;
-            if right > 0 {
-                right -= 1;
-            } else {
+        if nums[i] > target {
+            if i == 0 {
                 return false;
             }
+            right = i - 1;
         } else {
-            left = mid + 1;
+            left = i + 1;
         }
     }
-    false
+    return false;
 }
 fn main() {
     let matrix = vec![vec![1, 3, 5, 7], vec![10, 11, 16, 20], vec![23, 30, 34, 60]];
