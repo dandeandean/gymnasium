@@ -1,5 +1,5 @@
-fn calc_h(piles: &Vec<i32>, k: i32) -> i32 {
-    let mut ret = 0;
+fn calc_hours(piles: &Vec<i32>, k: i32) -> i32 {
+    let mut ret: i32 = 0;
     for &p in piles {
         if p < k {
             ret += 1;
@@ -9,18 +9,25 @@ fn calc_h(piles: &Vec<i32>, k: i32) -> i32 {
             if (p % k) != 0 {
                 res += 1;
             }
-            ret += res;
+            ret = ret.checked_add(res).unwrap_or(i32::max_value());
         }
     }
     ret
 }
 pub fn min_eating_speed(piles: Vec<i32>, h: i32) -> i32 {
-    //let (_, &(mut r)) = (1, piles.iter().max().unwrap());
-    let &(mut ret) = piles.iter().max().unwrap();
-    while calc_h(&piles, ret) <= h {
-        ret -= 1;
+    let (mut l, mut r): (i32, i32) = (1, piles.iter().max().unwrap().to_owned());
+    let mut ret = r;
+    while l <= r {
+        let k = (l + r) / 2;
+        // minimize calc'd hours
+        if calc_hours(&piles, k) <= h {
+            ret = std::cmp::min(ret, k);
+            r = k - 1;
+        } else {
+            l = k + 1;
+        }
     }
-    ret + 1
+    ret
 }
 
 fn main() {
@@ -34,4 +41,8 @@ fn main() {
     ];
     let large = 823855818;
     dbg!(min_eating_speed(big, large));
+    dbg!(min_eating_speed(
+        vec![805306368, 805306368, 805306368],
+        1000000000
+    ));
 }
