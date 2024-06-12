@@ -11,9 +11,10 @@ pub fn find_min(nums: Vec<i32>) -> i32 {
             // the edge is somewhere between mid & right
             l = m + 1;
         } else {
-            r = r.checked_sub(1).unwrap_or(0);
+            r = m.checked_sub(1).unwrap_or(0);
         }
     }
+    //nums.iter().min().unwrap().to_owned()
     std::cmp::min(ret, nums[0])
 }
 fn main() {
