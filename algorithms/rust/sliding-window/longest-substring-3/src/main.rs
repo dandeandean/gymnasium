@@ -1,17 +1,16 @@
 pub fn length_of_longest_substring(s: String) -> i32 {
     let mut used: std::collections::HashSet<char> = std::collections::HashSet::new();
-    let (mut ret, mut con): (i32, i32) = (0, 0);
-    for c in s.chars() {
-        if !used.contains(&c) {
-            con += 1;
-            ret = std::cmp::max(ret, con);
-        } else {
-            used.clear();
-            con = 1;
+    let (mut ret, mut l, mut _r): (usize, usize, usize) = (0, 0, 1);
+    for r in 0..s.len() {
+        let c = s.chars().nth(r).unwrap();
+        while used.contains(&c) {
+            used.remove(&s.chars().nth(l).unwrap());
+            l += 1;
         }
         used.insert(c);
+        ret = std::cmp::max(ret, r - l + 1);
     }
-    ret
+    ret as i32
 }
 fn main() {
     dbg!(
@@ -19,5 +18,6 @@ fn main() {
         length_of_longest_substring("bbbbb".to_string()),
         length_of_longest_substring("pwwkew".to_string()),
         length_of_longest_substring("".to_string()),
+        length_of_longest_substring("dvdf".to_string()),
     );
 }
