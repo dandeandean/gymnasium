@@ -18,23 +18,28 @@ impl TimeMap {
     }
 
     fn get(&self, key: String, timestamp: i32) -> String {
+        let mut last = &"".to_string();
         if !self.table.contains_key(&key) {
-            return "".to_string();
+            return last.to_string();
         }
-        let mut last = "".to_string();
-        for tup in self.table.get(&key).unwrap() {
-            //dbg!(&key, &tup);
-            if tup.1 == timestamp {
-                return tup.0.clone();
+        let field = self.table.get(&key).unwrap();
+        if field[0].1 > timestamp {
+            return last.to_string();
+        }
+        let (mut i, mut j): (usize, usize) = (0, field.len() - 1);
+        while i <= j {
+            let m = (i + j) / 2;
+            if field[m].1 == timestamp {
+                return field[m].0.clone();
             }
-            if tup.1 < timestamp {
-                last = tup.0.clone();
-            }
-            if tup.1 > timestamp {
-                break;
+            if field[m].1 < timestamp {
+                last = &field[m].0;
+                i = m + 1;
+            } else {
+                j = m - 1;
             }
         }
-        return last;
+        return last.to_string();
     }
 }
 fn main() {
