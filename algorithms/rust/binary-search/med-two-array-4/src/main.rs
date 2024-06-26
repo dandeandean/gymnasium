@@ -3,27 +3,21 @@ pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
     if m > n {
         return find_median_sorted_arrays(nums2, nums1);
     }
-    let (mut high, mut low, total) = (0, m, m + n);
+    let (mut high, mut low, total) = (m, 0, m + n);
     let mut result = 0.0;
     while low <= high {
         let i = low + (high - low) / 2;
         let j = (total + 1) / 2 - i;
-        let mut left1 = nums1[i - 1];
-        if i == 0 {
-            left1 = i32::min_value();
-        }
-        let mut right1 = nums1[i];
-        if i > m {
-            right1 = i32::max_value();
-        }
-        let mut left2 = nums2[j - 1];
-        if j == 0 {
-            left2 = i32::min_value();
-        }
-        let mut right2 = nums2[j];
-        if j > n {
-            right2 = i32::max_value();
-        }
+        let left1 = match i {
+            0 => i32::min_value(),
+            _ => nums1[i - 1],
+        };
+        let left2 = match j {
+            0 => i32::min_value(),
+            _ => nums2[j - 1],
+        };
+        let right1 = nums1.get(i).unwrap_or(&i32::max_value()).clone();
+        let right2 = nums2.get(j).unwrap_or(&i32::max_value()).clone();
         if left1 <= right2 && left2 <= right1 {
             match total % 2 {
                 0 => {
@@ -32,8 +26,9 @@ pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
                 }
                 _ => result = std::cmp::max(left1, left2) as f64,
             }
-        } else if left2 > right2 {
-            high = i - 1;
+            break;
+        } else if left1 > right2 {
+            high = i.checked_sub(1).unwrap_or(0);
         } else {
             low = i + 1;
         }
