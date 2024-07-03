@@ -1,18 +1,17 @@
 pub fn character_replacement(s: String, k: i32) -> i32 {
-    let (mut l, mut best): (usize, i32) = (1, 0);
     let mut counts: std::collections::HashMap<char, i32> = std::collections::HashMap::new();
-    let mut maxf: i32;
-    //while r < s.len() {
-    for (r, c) in s.chars().enumerate() {
+    let (mut l, mut r, mut maxf): (usize, usize, i32) = (0, 0, 0);
+    while r < s.len() {
+        let c = s.chars().nth(r).unwrap();
         *counts.entry(c).or_insert(0) += 1;
-        maxf = std::cmp::max(*counts.values().into_iter().max().unwrap(), counts[&c]);
-        if r as i32 - l as i32 - maxf + 1 > k {
-            *counts.entry(c).or_insert(0) -= 1;
+        maxf = std::cmp::max(maxf, counts[&c]);
+        if (r as i32 - l as i32 + 1) - maxf > k {
+            *counts.entry(s.chars().nth(l).unwrap()).or_insert(1) -= 1;
             l += 1;
         }
-        best = std::cmp::max(best, r as i32 - l as i32 + 1);
+        r += 1;
     }
-    best
+    r as i32 - l as i32
 }
 fn main() {
     dbg!(
