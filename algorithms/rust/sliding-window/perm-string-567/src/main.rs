@@ -30,11 +30,41 @@ pub fn check_inclusion(s1: String, s2: String) -> bool {
     }
     s2count == s1count
 }
+pub fn check_inclusion0(s1: String, s2: String) -> bool {
+    fn is_zero(counts: [i32; 26]) -> bool {
+        for i in 0..26 {
+            if counts[i] != 0 {
+                return false;
+            }
+        }
+        true
+    }
+    if s1.len() > s2.len() {
+        return false;
+    }
+    let mut counts: [i32; 26] = [0; 26];
+    for i in 0..s1.len() {
+        counts[s1.as_bytes()[i] as usize - 'a' as usize] += 1;
+        counts[s2.as_bytes()[i] as usize - 'a' as usize] -= 1;
+    }
+    if is_zero(counts) {
+        return true;
+    }
+    for i in s1.len()..s2.len() {
+        counts[s2.as_bytes()[i] as usize - 'a' as usize] -= 1;
+        counts[s2.as_bytes()[i - s1.len()] as usize - 'a' as usize] += 1;
+        if is_zero(counts) {
+            return true;
+        }
+    }
+    false
+}
+
 fn main() {
     dbg!(
-        check_inclusion("ab".to_string(), "eidbaooo".to_string()),
-        check_inclusion("ab".to_string(), "eidboaoo".to_string()),
-        check_inclusion("adc".to_string(), "dcda".to_string()),
-        check_inclusion("a".to_string(), "ab".to_string()),
+        check_inclusion0("ab".to_string(), "eidbaooo".to_string()),
+        check_inclusion0("ab".to_string(), "eidboaoo".to_string()),
+        check_inclusion0("adc".to_string(), "dcda".to_string()),
+        check_inclusion0("a".to_string(), "ab".to_string()),
     );
 }
