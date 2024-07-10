@@ -2,8 +2,10 @@ pub fn check_inclusion(s1: String, s2: String) -> bool {
     if s1.len() > s2.len() {
         return false;
     }
-    let mut s1count: std::collections::HashMap<char, i32> = std::collections::HashMap::new();
-    let mut s2count: std::collections::HashMap<char, i32> = std::collections::HashMap::new();
+    let mut s1count: std::collections::HashMap<char, i32> =
+        std::collections::HashMap::with_capacity(s1.len());
+    let mut s2count: std::collections::HashMap<char, i32> =
+        std::collections::HashMap::with_capacity(s1.len());
     let (mut l, mut r): (usize, usize) = (0, 0);
     for c in s1.chars() {
         *s1count.entry(c).or_insert(0) += 1;
@@ -62,9 +64,9 @@ pub fn check_inclusion0(s1: String, s2: String) -> bool {
 
 fn main() {
     dbg!(
-        check_inclusion0("ab".to_string(), "eidbaooo".to_string()),
-        check_inclusion0("ab".to_string(), "eidboaoo".to_string()),
-        check_inclusion0("adc".to_string(), "dcda".to_string()),
-        check_inclusion0("a".to_string(), "ab".to_string()),
+        check_inclusion("ab".to_string(), "eidbaooo".to_string()),
+        check_inclusion("ab".to_string(), "eidboaoo".to_string()),
+        check_inclusion("adc".to_string(), "dcda".to_string()),
+        check_inclusion("a".to_string(), "ab".to_string()),
     );
 }
