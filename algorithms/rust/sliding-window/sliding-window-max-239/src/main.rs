@@ -33,8 +33,7 @@ pub fn dumb_max_sliding_window(nums: Vec<i32>, k: i32) -> Vec<i32> {
     out
 }
 fn main() {
-    dbg!(
-        dumb_max_sliding_window(vec![1, 3, -1, -3, 5, 3, 6, 7], 3),
-        dumb_max_sliding_window(vec![1], 1)
-    );
+    for f in [max_sliding_window, dumb_max_sliding_window] {
+        dbg!(f(vec![1, 3, -1, -3, 5, 3, 6, 7], 3), f(vec![1], 1));
+    }
 }
