@@ -9,16 +9,22 @@ impl ListNode {
         ListNode { next: None, val }
     }
 }
-// from: https://leetcode.com/problems/reverse-linked-list/solutions/4904416/beats-100-full-solution-explained-with-dry-run-java-c-python-rust-javascript-go/
 pub fn reverse_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-    let mut curr: Option<Box<ListNode>> = head;
-    let mut prev: Option<Box<ListNode>> = None;
-    while let Some(mut node) = curr {
-        let holder = node.next;
-        node.next = prev;
-        prev = Some(node);
-        curr = holder;
+    let (mut previous, mut cur) = (None, head);
+    while let Some(mut node) = cur {
+        let next = node.next;
+        node.next = previous;
+        previous = Some(node);
+        cur = next;
     }
-    curr
+    previous
 }
-fn main() {}
+fn main() {
+    let mut head: Option<Box<ListNode>> = Some(Box::new(ListNode::new(1)));
+    let mut mid: Option<Box<ListNode>> = Some(Box::new(ListNode::new(2)));
+    let tail: Option<Box<ListNode>> = Some(Box::new(ListNode::new(3)));
+    mid.as_mut().unwrap().next = tail;
+    head.as_mut().unwrap().next = mid.clone();
+    dbg!(&head);
+    dbg!(reverse_list(head));
+}
