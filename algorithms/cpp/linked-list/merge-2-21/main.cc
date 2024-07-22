@@ -28,7 +28,6 @@ ListNode *mergeTwoLists(ListNode *list1, ListNode *list2) {
 }
 
 int main(void) {
-
   ListNode *list1 = new ListNode(1);
   list1->next = new ListNode(2);
   ListNode *list2 = new ListNode(2);
