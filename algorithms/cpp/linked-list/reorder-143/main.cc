@@ -1,4 +1,5 @@
 // Definition for singly-linked list.
+#include <cstddef>
 #include <deque>
 #include <iostream>
 #include <vector>
@@ -12,55 +13,45 @@ struct ListNode {
 class Solution {
 public:
   void reorderList(ListNode *head) {
-    ListNode *cur = head;
-    std::vector<ListNode *> stack;
-    while (cur) { // First Pass to init stack
-      stack.push_back(cur);
-      cur = cur->next;
+    ListNode *end, *mid;
+    mid = head;
+    end = head->next;
+    while (end && end->next) {
+      mid = end->next;
+      end = end->next->next;
     }
-    cur = head;
+    Solution::mid_end(head, mid, end);
+    std::cout << "m=" << mid->val << "\ne=" << end->val << std::endl;
+  }
+
+private:
+  void mergeList(ListNode *head1, ListNode *head2) {}
+  void reverseList(ListNode *head) {
+    ListNode *cur = head;
+    ListNode *prev;
     while (cur) {
-      ListNode *back = stack.back();
-      if (!stack.empty()) {
-        stack.pop_back();
-        // stack.back() = nullptr;
-      }
-      if (back) {
-        back->next = cur->next;
-        ListNode *old_next = cur->next;
-        cur->next = back;
-        cur = old_next->next;
-      }
-      cur = cur->next;
-      if (back == cur) {
-        std::cout << "(" << cur->val << ")" << std::endl;
-        // cur->next = nullptr;
-        return;
-      }
+      ListNode *old_next = cur->next;
+      cur->next = prev;
+      prev = cur;
+      cur = old_next;
     }
   }
 };
+
 int main(void) {
-  ListNode *d = new ListNode(4);
+  ListNode *f = new ListNode(6);
+  ListNode *e = new ListNode(5, f);
+  ListNode *d = new ListNode(4, e);
   ListNode *c = new ListNode(3, d);
   ListNode *b = new ListNode(2, c);
   ListNode *a = new ListNode(1, b);
   Solution *s = new Solution;
   ListNode *cur = a;
+  s->reorderList(a);
+  cur = a;
   while (cur) {
-    std::cout << "(" << cur->val << ")->";
+    std::cout << "(" << cur->val << ")->&" << cur->next << "\n";
     cur = cur->next;
   }
-  std::cout << std::endl;
-  s->reorderList(a);
-  std::cout << "(" << a->val << ")->" << a->next->val << "\n";
-  std::cout << "(" << b->val << ")->" << b->next->val << "\n";
-  std::cout << "(" << c->val << ")->" << c->next->val << "\n";
-  std::cout << "(" << d->val << ")->" << d->next->val << "\n";
-  cur = a;
-  // while (cur) {
-  //   std::cout << cur->val;
-  //   cur = cur->next;
-  // }
   return 0;
 }
