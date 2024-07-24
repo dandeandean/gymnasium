@@ -1,4 +1,4 @@
-// Definition for singly-linked list.
+// Definition for singly-linked head.
 #include <cstddef>
 #include <deque>
 #include <iostream>
@@ -13,31 +13,49 @@ struct ListNode {
 class Solution {
 public:
   void reorderList(ListNode *head) {
-    ListNode *end, *mid;
-    mid = head;
-    end = head->next;
-    while (end && end->next) {
-      mid = end->next;
-      end = end->next->next;
+    if (!head->next) {
+      return;
     }
-    Solution::mid_end(head, mid, end);
-    std::cout << "m=" << mid->val << "\ne=" << end->val << std::endl;
+    ListNode *sprev, *fprev;
+    ListNode *slow = head, *fast = head;
+    while (fast && fast->next) {
+      sprev = slow;
+      slow = slow->next;
+      fprev = fast->next;
+      fast = fast->next->next;
+    }
+    // separate the two lists
+    sprev->next = NULL;
+    reverse(slow);
+    ListNode *last = fast ? fast : fprev;
+    merge(head, last);
   }
 
 private:
-  void mergeList(ListNode *head1, ListNode *head2) {}
-  void reverseList(ListNode *head) {
-    ListNode *cur = head;
-    ListNode *prev;
-    while (cur) {
-      ListNode *old_next = cur->next;
-      cur->next = prev;
-      prev = cur;
-      cur = old_next;
+  void reverse(ListNode *head) {
+    ListNode *prev = NULL;
+    ListNode *curr = head;
+    ListNode *next = curr->next;
+    while (curr) {
+      next = curr->next;
+      curr->next = prev;
+      prev = curr;
+      curr = next;
+    }
+  }
+  void merge(ListNode *l1, ListNode *l2) {
+    while (l1) {
+      ListNode *p1 = l1->next, *p2 = l2->next;
+      l1->next = l2;
+      if (!p1) {
+        break;
+      }
+      l2->next = p1;
+      l1 = p1;
+      l2 = p2;
     }
   }
 };
-
 int main(void) {
   ListNode *f = new ListNode(6);
   ListNode *e = new ListNode(5, f);
@@ -48,10 +66,10 @@ int main(void) {
   Solution *s = new Solution;
   ListNode *cur = a;
   s->reorderList(a);
-  cur = a;
   while (cur) {
-    std::cout << "(" << cur->val << ")->&" << cur->next << "\n";
+    std::cout << "(" << cur->val << ")->";
     cur = cur->next;
   }
+  std::cout << std::endl;
   return 0;
 }

@@ -8,7 +8,6 @@ struct ListNode {
 };
 ListNode *mergeTwoLists(ListNode *list1, ListNode *list2) {
   ListNode *current, *anchor = new ListNode;
-  // ListNode *anchor = current;
   while (list1 && list2) {
     if (list1->val <= list2->val) {
       current->next = list1;
