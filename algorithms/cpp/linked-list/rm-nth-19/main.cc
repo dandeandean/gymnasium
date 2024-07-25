@@ -11,13 +11,24 @@ struct ListNode {
 class Solution {
 public:
   ListNode *removeNthFromEnd(ListNode *head, int n) {
-    ListNode *cur = head;
+    ListNode *cur = head, *prev = head;
     int count = 0;
     while (cur) {
       count++;
       cur = cur->next;
     }
-    std::cout << count << std::endl;
+    cur = head;
+    while (count > n) {
+      count--;
+      prev = cur;
+      cur = cur->next;
+    }
+    if (prev == cur) {
+      cur = NULL;
+    }
+    if (cur) {
+      prev->next = cur->next;
+    }
     return head;
   }
 };
@@ -30,8 +41,8 @@ int main() {
   ListNode *b = new ListNode(2, c);
   ListNode *a = new ListNode(1, b);
   Solution *s = new Solution;
+  s->removeNthFromEnd(a, 1);
   ListNode *cur = a;
-  s->removeNthFromEnd(a, 3);
   while (cur) {
     std::cout << "->(" << cur->val << ")";
     cur = cur->next;
