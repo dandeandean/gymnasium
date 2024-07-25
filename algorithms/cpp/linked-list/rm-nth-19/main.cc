@@ -10,7 +10,7 @@ struct ListNode {
 
 class Solution {
 public:
-  ListNode *removeNthFromEnd(ListNode *head, int n) {
+  ListNode *removeNthFromEndDumb(ListNode *head, int n) {
     ListNode *cur = head, *prev = NULL;
     int count = 0;
     while (cur) {
@@ -31,6 +31,24 @@ public:
     }
     return head;
   }
+  ListNode *removeNthFromEnd(ListNode *head, int n) {
+    if (!head->next) {
+      return NULL;
+    }
+    ListNode *funny = new ListNode(0, head);
+    ListNode *fast = funny, *slow = head;
+    for (int i = 0; i <= n; i++) {
+      fast = fast->next;
+    }
+    while (fast) {
+      fast = fast->next;
+      slow = slow->next;
+    }
+    if (slow->next) {
+      slow->next = slow->next->next;
+    }
+    return funny->next;
+  }
 };
 
 int main() {
@@ -41,10 +59,10 @@ int main() {
   ListNode *b = new ListNode(2, c);
   ListNode *a = new ListNode(1, b);
   Solution *s = new Solution;
-  int n = 6;
+  int n = 3;
+  std::cout << "n=" << n << std::endl;
   s->removeNthFromEnd(a, n);
   ListNode *cur = a;
-  std::cout << "n=" << n << std::endl;
   while (cur) {
     std::cout << "->(" << cur->val << ")";
     cur = cur->next;
