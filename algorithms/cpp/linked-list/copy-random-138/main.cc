@@ -19,12 +19,19 @@ class Solution {
 public:
   Node *copyRandomList(Node *head) {
     Node *cur = head;
-    std::vector<Node *> v;
+    std::vector<Node *> nodes;
     while (cur) {
-      v.push_back(new Node(cur->val));
+      Node *new_node = new Node(cur->val);
+      nodes.push_back(new_node);
       cur = cur->next;
     }
-    return v.front();
+    cur = head;
+    for (Node *node : nodes) {
+      // This doesn't work because we're pointing to the origninal memory spot
+      node->next = cur->next;
+      node->random = cur->random;
+    }
+    return nodes.front();
   }
 };
 
