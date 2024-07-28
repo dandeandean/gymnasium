@@ -1,6 +1,7 @@
 // Definition for a Node.
 #include <cstddef>
 #include <iostream>
+#include <unordered_map>
 #include <vector>
 class Node {
 public:
@@ -20,18 +21,22 @@ public:
   Node *copyRandomList(Node *head) {
     Node *cur = head;
     std::vector<Node *> nodes;
+    std::unordered_map<Node *, Node *> node_map;
     while (cur) {
       Node *new_node = new Node(cur->val);
-      nodes.push_back(new_node);
+      node_map[cur] = new_node;
       cur = cur->next;
     }
     cur = head;
-    for (Node *node : nodes) {
-      // This doesn't work because we're pointing to the origninal memory spot
-      node->next = cur->next;
-      node->random = cur->random;
+    // assign random & next to new nodes
+    while (cur) {
+      Node *new_node = node_map[cur];
+      new_node->next = node_map[cur->next];
+      new_node->random = node_map[cur->random];
+      cur = cur->next;
     }
-    return nodes.front();
+    std::cout << "(out)" << std::endl;
+    return node_map[head];
   }
 };
 
