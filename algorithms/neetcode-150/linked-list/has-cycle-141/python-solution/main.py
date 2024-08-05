@@ -5,7 +5,7 @@ class ListNode:
         self.next = None
 
 class Solution:
-    def hasCycle(self, head: Optional[ListNode]) -> bool: 
+    def hasCycle(self, head: ListNode | None) -> bool: 
         been_to = set()
         cur = head
         while cur : 
@@ -13,4 +13,14 @@ class Solution:
                 return True
             been_to.add(cur)
             cur = cur.next
+        return False
+
+    def hasCycle0(self, head: ListNode) -> bool: 
+        # Slow & Fast pointers
+        slow: ListNode | None = head
+        fast: ListNode | None = head.next
+        while slow and fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast: return True
         return False
