@@ -24,7 +24,6 @@ class LRUCache:
         node.next = self.MRU
         self.size +=1
 
-
     def __pop(self, node: Node) -> None:
         old_next = node.next
         old_prev = node.prev
