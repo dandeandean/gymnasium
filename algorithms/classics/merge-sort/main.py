@@ -22,8 +22,12 @@ def __merge(l1: list[int], l2: list[int]):
 
 def merge_sort(nums: list[int]) -> list[int]:
     # break up the list into separate pieces & zip them back together correctly
-    return [nums[0]]
+    if len(nums) <= 1: return nums
+    mid: int = len(nums)//2
+    return __merge(merge_sort(nums[:mid]),merge_sort(nums[mid:])) 
 
 if __name__ == "__main__":
-    print(__merge([3,4],[2,3]))
+    print(merge_sort([3,4,2,3]))
+    print(merge_sort([]))
+    print(merge_sort([50,40,30,20,10]))
     
