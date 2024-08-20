@@ -10,22 +10,25 @@ type ListNode struct {
 	Next *ListNode
 }
 
+func jumpK(start *ListNode, k int) *ListNode {
+	cur := start
+	for k > 0 && cur != nil {
+		if k >= 2 && cur.Next != nil {
+			cur = cur.Next
+			k--
+		}
+		cur = cur.Next
+		k--
+	}
+	return cur
+}
+
 func reverseKGroup(head *ListNode, k int) *ListNode {
 	anchor := &ListNode{Next: head}
-	cur := anchor.Next
-	// not O(1) memory
-	var m map[int]*ListNode = make(map[int]*ListNode)
-	i := 0
-	for cur != nil {
-		m[i] = cur
-		i++
-		cur = cur.Next
-	}
 	groupPrev := anchor
-	i = 0
 	for {
-		kth, ok := m[k+i]
-		if !ok {
+		kth := jumpK(groupPrev, k)
+		if nil == kth {
 			break
 		}
 		groupNext := kth.Next
@@ -36,7 +39,6 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
 			prev = cur
 			cur = tmp
 		}
-		i += k
 		tmp := groupPrev.Next
 		groupPrev.Next = prev
 		prev = groupPrev
@@ -59,7 +61,7 @@ func printList(head *ListNode) {
 	}
 }
 func main() {
-	oldList := &ListNode{1, &ListNode{2, &ListNode{3, &ListNode{4, nil}}}}
+	oldList := &ListNode{1, &ListNode{2, &ListNode{3, &ListNode{4, &ListNode{5, nil}}}}}
 	printList(oldList)
 	newList := reverseKGroup(oldList, 2)
 	printList(newList)
