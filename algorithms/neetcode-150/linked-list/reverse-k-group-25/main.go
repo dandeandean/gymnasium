@@ -17,14 +17,14 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
 	var m map[int]*ListNode = make(map[int]*ListNode)
 	i := 0
 	for cur != nil {
-		fmt.Println(cur)
 		m[i] = cur
 		i++
 		cur = cur.Next
 	}
 	groupPrev := anchor
+	i = 0
 	for {
-		kth, ok := m[k]
+		kth, ok := m[k+i]
 		if !ok {
 			break
 		}
@@ -36,6 +36,7 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
 			prev = cur
 			cur = tmp
 		}
+		i += k
 		tmp := groupPrev.Next
 		groupPrev.Next = prev
 		prev = groupPrev
@@ -45,6 +46,21 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
 	return anchor.Next
 }
 
+func printList(head *ListNode) {
+	cur := head
+	for cur != nil {
+		fmt.Printf("(%d)", cur.Val)
+		cur = cur.Next
+		if cur != nil {
+			fmt.Printf("->")
+		} else {
+			fmt.Printf("\n")
+		}
+	}
+}
 func main() {
-	reverseKGroup(&ListNode{1, &ListNode{2, &ListNode{3, &ListNode{4, nil}}}}, 2)
+	oldList := &ListNode{1, &ListNode{2, &ListNode{3, &ListNode{4, nil}}}}
+	printList(oldList)
+	newList := reverseKGroup(oldList, 2)
+	printList(newList)
 }
