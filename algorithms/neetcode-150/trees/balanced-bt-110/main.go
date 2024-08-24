@@ -1,30 +1,38 @@
 package main
 
-import "math"
-
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
 	Right *TreeNode
 }
 
-func getWeight(n *TreeNode) int {
-	if nil == n {
-		return 0
+func abs(i int) int {
+	if i < 0 {
+		return -i
 	}
-	return 1 + max(getWeight(n.Right), getWeight(n.Left))
+	return i
+}
+
+type TreeTuple struct {
+	Height   int
+	Balanced bool
+}
+
+func dfsBalanced(n *TreeNode) TreeTuple {
+	if nil == n {
+		return TreeTuple{0, true}
+	}
+	leftWeight := dfsBalanced(n.Left)
+	rightWeight := dfsBalanced(n.Right)
+	diff := abs(leftWeight.Height - rightWeight.Height)
+	bal := leftWeight.Balanced && rightWeight.Balanced && (diff <= 1)
+	return TreeTuple{
+		Height:   1 + max(leftWeight.Height, rightWeight.Height),
+		Balanced: bal,
+	}
 }
 func isBalanced(root *TreeNode) bool {
-	if nil == root {
-		return true
-	}
-	leftWeight := getWeight(root.Left)
-	rightWeight := getWeight(root.Right)
-	if leftWeight > rightWeight {
-
-		return leftWeight-rightWeight <= 1
-	}
-	return rightWeight-leftWeight <= 1
+	return dfsBalanced(root).Balanced
 }
 
 func main() {
