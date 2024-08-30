@@ -11,7 +11,9 @@ type TreeNode struct {
 
 func rightSideView(root *TreeNode) []int {
 	out := make([]int, 0)
-	for root != nil {
+	q := make([]*TreeNode, 0)
+	q = append(q, root)
+	for len(q) > 0 {
 		out = append(out, root.Val)
 		root = root.Right
 	}
