@@ -19,14 +19,15 @@ func rightSideView(root *TreeNode) []int {
 		for i := 0; i < lenQ; i++ {
 			youAreHere := q[0]
 			q = q[1:]
-			if youAreHere != nil {
-				level = append(level, youAreHere.Val)
-				if youAreHere.Left != nil {
-					q = append(q, youAreHere.Left)
-				}
-				if youAreHere.Right != nil {
-					q = append(q, youAreHere.Right)
-				}
+			if youAreHere == nil {
+				break
+			}
+			level = append(level, youAreHere.Val)
+			if youAreHere.Left != nil {
+				q = append(q, youAreHere.Left)
+			}
+			if youAreHere.Right != nil {
+				q = append(q, youAreHere.Right)
 			}
 		}
 		if len(level) != 0 {
