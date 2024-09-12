@@ -11,23 +11,20 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-func checker(father *TreeNode) bool {
-	if (father == nil) || (father.Left == nil && father.Right == nil) {
+func checker(father *TreeNode, lBound, rBound int) bool {
+	if father == nil {
 		return true
 	}
-	if father.Right == nil {
-		return father.Val > father.Left.Val
+	if (father.Val <= lBound) || (father.Val >= rBound) {
+		return false
 	}
-	if father.Left == nil {
-		return father.Val < father.Right.Val
-	}
-	//(father.Val < father.Right.Val) && (father.Val > father.Left.Val)
-	return checker(father.Left) && checker(father.Right)
+
+	return checker(father.Left, lBound, father.Val) && checker(father.Right, father.Val, rBound)
 }
 func isValidBST(root *TreeNode) bool {
 	leftBound := math.MinInt
 	rightBound := math.MaxInt
-	return checker(root.Left) && checker(root.Right)
+	return checker(root, leftBound, rightBound)
 }
 func main() {
 	fmt.Println("Validating...")
