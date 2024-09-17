@@ -7,21 +7,24 @@ type TreeNode struct {
 }
 
 func kthSmallest(root *TreeNode, k int) int {
-	nums := make([]int, 0)
 	stack := []*TreeNode{root}
 	cur := root
+	visited := 0
 	for len(stack) > 0 {
-		if cur.Right != nil {
-			stack = append(stack, cur.Right)
+		//go left
+		for cur != nil {
+			stack = append(stack, cur)
+			cur = cur.Left
 		}
-		if cur.Left != nil {
-			stack = append(stack, cur.Left)
+		cur, stack = stack[len(stack)-1], stack[:len(stack)-1]
+		visited++
+		if visited == k {
+			break
 		}
-		top := stack[0]
-		stack = stack[1:]
-		nums = append(nums, top.Val)
+		// go right
+		cur = cur.Right
 	}
-	return nums[k-1]
+	return cur.Val
 }
 
 func main() {
