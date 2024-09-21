@@ -7,25 +7,24 @@ type TreeNode struct {
 }
 
 func buildTree(preorder []int, inorder []int) *TreeNode {
-	root := new(TreeNode)
-	if len(preorder) != len(inorder) {
-		return root
-	}
 	// PreOrder := root + left sub tree + right sub tree
 	// InOrder : = left sub + node + right sub
-	// Because of this we can start with the PreOrder[0] as root
-	root.Val = preorder[0]
-	// Then use inorder's left sub tree
-	cur := root
-	for val := range inorder {
-		if val == root.Val {
+	if len(preorder) == 0 {
+		return nil
+	}
+	root := &TreeNode{Val: preorder[0]}
+	var leftPre, leftIn, rightPre, rightIn []int
+	for i, val := range inorder {
+		if val == preorder[0] {
+			leftPre = preorder[1 : i+1]
+			leftIn = inorder[:i+1]
+			rightPre = preorder[i+1:]
+			rightIn = inorder[i+1:]
 			break
 		}
-		newNode := new(TreeNode)
-		newNode.Val = val
-		cur.Left = newNode
-		cur = cur.Left
 	}
+	root.Left = buildTree(leftPre, leftIn)
+	root.Right = buildTree(rightPre, rightIn)
 	return root
 }
 func main() {
