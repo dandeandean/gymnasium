@@ -9,18 +9,18 @@ type KthLargest struct {
 
 func heapify(nums []int, i int) {
 	left, right := i*2+1, i*2+2
+	smallest := i
 	if right >= len(nums) {
 		return
 	}
-	smallest := 0
 	if nums[left] < nums[smallest] {
 		smallest = left
 	}
 	if nums[right] < nums[smallest] {
 		smallest = right
 	}
-	if smallest != 0 {
-		nums[i], nums[smallest] = nums[smallest], nums[i]
+	if smallest != i {
+		nums[smallest], nums[i] = nums[i], nums[smallest]
 		heapify(nums, smallest)
 	}
 
@@ -29,7 +29,9 @@ func heapify(nums []int, i int) {
 func Constructor(k int, nums []int) KthLargest {
 	for len(nums) > k {
 		nums = nums[1:]
-		heapify(nums, 0)
+		for i := len(nums) / 2; i >= 0; i-- {
+			heapify(nums, i)
+		}
 	}
 	return KthLargest{
 		k:    k,
@@ -40,11 +42,15 @@ func Constructor(k int, nums []int) KthLargest {
 func (this *KthLargest) Add(val int) int {
 	this.heap = append(this.heap, val)
 	if len(this.heap) > this.k {
-		heapify(this.heap, 0)
+		for i := len(this.heap) / 2; i >= 0; i-- {
+			heapify(this.heap, i)
+		}
 		this.heap = this.heap[1:]
 
 	}
-	heapify(this.heap, 0)
+	for i := len(this.heap) / 2; i >= 0; i-- {
+		heapify(this.heap, i)
+	}
 	return this.heap[0]
 }
 
@@ -54,8 +60,10 @@ func (this *KthLargest) Add(val int) int {
  * param_1 := obj.Add(val);
  */
 func main() {
-	arr := []int{3, 2, 1, 4, 5}
+	arr := []int{4, 5, 8, 2}
 	fmt.Println(arr)
-	heapify(arr, 0)
+	for i := len(arr) / 2; i >= 0; i-- {
+		heapify(arr, i)
+	}
 	fmt.Println(arr)
 }
