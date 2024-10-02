@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type KthLargest struct {
 	k    int
 	heap []int
@@ -51,3 +53,9 @@ func (this *KthLargest) Add(val int) int {
  * obj := Constructor(k, nums);
  * param_1 := obj.Add(val);
  */
+func main() {
+	arr := []int{3, 2, 1, 4, 5}
+	fmt.Println(arr)
+	heapify(arr, 0)
+	fmt.Println(arr)
+}
