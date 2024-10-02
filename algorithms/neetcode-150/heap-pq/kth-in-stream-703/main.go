@@ -10,14 +10,15 @@ type KthLargest struct {
 func heapify(nums []int, i int) {
 	left, right := i*2+1, i*2+2
 	smallest := i
-	if right >= len(nums) {
-		return
+	if left < len(nums) {
+		if nums[left] < nums[smallest] {
+			smallest = left
+		}
 	}
-	if nums[left] < nums[smallest] {
-		smallest = left
-	}
-	if nums[right] < nums[smallest] {
-		smallest = right
+	if right < len(nums) {
+		if nums[right] < nums[smallest] {
+			smallest = right
+		}
 	}
 	if smallest != i {
 		nums[smallest], nums[i] = nums[i], nums[smallest]
