@@ -24,15 +24,13 @@ func heapify(nums []int, i int) {
 		nums[smallest], nums[i] = nums[i], nums[smallest]
 		heapify(nums, smallest)
 	}
-
 }
-
 func Constructor(k int, nums []int) KthLargest {
 	for len(nums) > k {
-		nums = nums[1:]
-		for i := len(nums) / 2; i >= 0; i-- {
+		for i := len(nums)/2 + 1; i >= 0; i-- {
 			heapify(nums, i)
 		}
+		nums = nums[1:]
 	}
 	return KthLargest{
 		k:    k,
@@ -42,20 +40,17 @@ func Constructor(k int, nums []int) KthLargest {
 
 func (this *KthLargest) Add(val int) int {
 	this.heap = append(this.heap, val)
+	for i := len(this.heap) / 2; i >= 0; i-- {
+		heapify(this.heap, i)
+	}
 	if len(this.heap) > this.k {
-		for i := len(this.heap) / 2; i >= 0; i-- {
-			heapify(this.heap, i)
-		}
 		this.heap = this.heap[1:]
-
 	}
 	for i := len(this.heap) / 2; i >= 0; i-- {
 		heapify(this.heap, i)
 	}
 	return this.heap[0]
-}
-
-/**
+} /**
  * Your KthLargest object will be instantiated and called as such:
  * obj := Constructor(k, nums);
  * param_1 := obj.Add(val);
