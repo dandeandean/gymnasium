@@ -2,12 +2,12 @@ package main
 
 type MaxHeap []int
 
+func (h MaxHeap) Len() int      { return len(h) }
 func (h MaxHeap) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
 func (h *MaxHeap) Pop() int {
 	old := *h
-	n := len(old)
-	x := old[n-1]
-	*h = old[0 : n-1]
+	x := old[0]
+	*h = old[1:]
 	return x
 }
 func (h *MaxHeap) Push(n int) {
