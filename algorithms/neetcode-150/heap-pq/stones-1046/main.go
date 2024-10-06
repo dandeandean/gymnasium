@@ -7,11 +7,12 @@ func lastStoneWeight(stones []int) int {
 	fmt.Println(h)
 	for h.Len() > 1 {
 		a := h.Pop()
-		if h.Len() <= 1 {
+		if h.Len() == 0 {
 			return a
 		}
 		b := h.Pop()
 		val := a - b
+		println(a, b, val)
 		if val < 0 {
 			val = -val
 		}
@@ -19,13 +20,14 @@ func lastStoneWeight(stones []int) int {
 			h.Push(val)
 		}
 	}
-	return h.Pop()
+	if h.Len() > 0 {
+		return h.Pop()
+	}
+	return 0
 }
 
 func main() {
-	stones := []int{2, 7, 4, 1, 8, 1}
+	stones := []int{4, 3, 4, 3, 2}
 	out := lastStoneWeight(stones)
-	out2 := lastStoneWeight([]int{1})
 	fmt.Println(out)
-	fmt.Println(out2)
 }
