@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type Heap struct {
 	Vals  []int
 	IsMax bool
@@ -8,32 +10,47 @@ type Heap struct {
 func (h Heap) Len() int      { return len(h.Vals) }
 func (h Heap) Swap(i, j int) { h.Vals[i], h.Vals[j] = h.Vals[j], h.Vals[i] }
 
-func genCmpEq(a, b int, gt bool) bool {
-	if (a >= b) && gt {
-		return true
-	}
-	if (a <= b) && !gt {
-		return true
+func (h Heap) cmp(a, b int) bool {
+	if h.IsMax {
+		if a >= b {
+			return true
+		}
+		return false
+	} else {
+		if a <= b {
+			return true
+		}
 	}
 	return false
 }
 
-func (h Heap) Heapify(i int, isMax bool) {
+func (h Heap) Heapify(i int) {
 	left, right := i*2+1, i*2+2
-	ibig := i
+	maxima := i
+	fmt.Println("ismax= ", h.IsMax)
 	if left < h.Len() {
-		if genCmpEq(h.Vals[left], h.Vals[ibig], isMax) {
-			ibig = left
+		if h.Vals[left] >= h.Vals[maxima] && h.IsMax {
+			fmt.Println("switching")
+			maxima = left
+		}
+		if h.Vals[left] <= h.Vals[maxima] && !h.IsMax {
+			fmt.Println("switching")
+			maxima = left
 		}
 	}
 	if right < h.Len() {
-		if genCmpEq(h.Vals[right], h.Vals[ibig], isMax) {
-			ibig = right
+		if h.Vals[right] >= h.Vals[maxima] && h.IsMax {
+			fmt.Println("switching")
+			maxima = right
+		}
+		if h.Vals[right] <= h.Vals[maxima] && !h.IsMax {
+			fmt.Println("switching")
+			maxima = right
 		}
 	}
-	if ibig != i {
-		h.Swap(ibig, i)
-		h.Heapify(ibig, isMax)
+	if maxima != i {
+		h.Swap(maxima, i)
+		h.Heapify(maxima)
 	}
 }
 func (h *Heap) Pop() int {
@@ -43,28 +60,32 @@ func (h *Heap) Pop() int {
 	old := *h
 	x := old.Vals[0]
 	if h.Len() <= 1 {
-		//FIXME: used to be a pointer so this may mess up
+		// FIXME: used to be a pointer so this may mess up
 		h.Vals = []int{}
 	} else {
 		h.Vals = old.Vals[1:]
 	}
 	for i := h.Len() / 2; i >= 0; i-- {
-		h.Heapify(i, h.IsMax)
+		h.Heapify(i)
 	}
 	return x
 }
 func (h *Heap) Push(n int) {
 	h.Vals = append(h.Vals, n)
 	for i := h.Len() / 2; i >= 0; i-- {
-		h.Heapify(i, h.IsMax)
+		h.Heapify(i)
 	}
 }
 
-func HeapFrom(nums []int, isMax bool) *Heap {
-	heap := new(Heap)
+func (h *Heap) From(nums []int) {
 	for _, n := range nums {
-		heap.Push(n)
+		h.Push(n)
 	}
-	heap.IsMax = isMax
-	return heap
+}
+
+func MaxHeap() *Heap {
+	return &Heap{IsMax: true}
+}
+func MinHeap() *Heap {
+	return &Heap{IsMax: false}
 }
