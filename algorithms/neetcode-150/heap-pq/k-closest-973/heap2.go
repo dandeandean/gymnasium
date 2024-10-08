@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 type Heap struct {
 	Vals  []int
 	IsMax bool
@@ -12,12 +10,12 @@ func (h Heap) Swap(i, j int) { h.Vals[i], h.Vals[j] = h.Vals[j], h.Vals[i] }
 
 func (h Heap) cmp(a, b int) bool {
 	if h.IsMax {
-		if a >= b {
+		if h.Vals[a] >= h.Vals[b] {
 			return true
 		}
 		return false
 	} else {
-		if a <= b {
+		if h.Vals[a] <= h.Vals[b] {
 			return true
 		}
 	}
@@ -27,24 +25,13 @@ func (h Heap) cmp(a, b int) bool {
 func (h Heap) Heapify(i int) {
 	left, right := i*2+1, i*2+2
 	maxima := i
-	fmt.Println("ismax= ", h.IsMax)
 	if left < h.Len() {
-		if h.Vals[left] >= h.Vals[maxima] && h.IsMax {
-			fmt.Println("switching")
-			maxima = left
-		}
-		if h.Vals[left] <= h.Vals[maxima] && !h.IsMax {
-			fmt.Println("switching")
+		if h.cmp(left, maxima) {
 			maxima = left
 		}
 	}
 	if right < h.Len() {
-		if h.Vals[right] >= h.Vals[maxima] && h.IsMax {
-			fmt.Println("switching")
-			maxima = right
-		}
-		if h.Vals[right] <= h.Vals[maxima] && !h.IsMax {
-			fmt.Println("switching")
+		if h.cmp(right, maxima) {
 			maxima = right
 		}
 	}
