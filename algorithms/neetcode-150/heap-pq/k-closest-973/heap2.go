@@ -1,7 +1,19 @@
 package main
 
+type Coord []int
+
+func (c Coord) SquardDist() int {
+	X := c[0]
+	Y := c[1]
+	return X*X + Y*Y
+}
+
+func (c Coord) Slice() []int {
+	return []int{c[0], c[1]}
+}
+
 type Heap struct {
-	Vals  []int
+	Vals  []Coord
 	IsMax bool
 }
 
@@ -10,12 +22,12 @@ func (h Heap) Swap(i, j int) { h.Vals[i], h.Vals[j] = h.Vals[j], h.Vals[i] }
 
 func (h Heap) cmp(a, b int) bool {
 	if h.IsMax {
-		if h.Vals[a] >= h.Vals[b] {
+		if h.Vals[a].SquardDist() >= h.Vals[b].SquardDist() {
 			return true
 		}
 		return false
 	} else {
-		if h.Vals[a] <= h.Vals[b] {
+		if h.Vals[a].SquardDist() <= h.Vals[b].SquardDist() {
 			return true
 		}
 	}
@@ -40,15 +52,14 @@ func (h Heap) Heapify(i int) {
 		h.Heapify(maxima)
 	}
 }
-func (h *Heap) Pop() int {
+func (h *Heap) Pop() Coord {
 	if h.Len() == 0 {
 		panic("WHAT ARE YOU DOING CALLING POP ON AN EMPTY HEAP?")
 	}
 	old := *h
 	x := old.Vals[0]
 	if h.Len() <= 1 {
-		// FIXME: used to be a pointer so this may mess up
-		h.Vals = []int{}
+		h.Vals = []Coord{}
 	} else {
 		h.Vals = old.Vals[1:]
 	}
@@ -57,14 +68,14 @@ func (h *Heap) Pop() int {
 	}
 	return x
 }
-func (h *Heap) Push(n int) {
+func (h *Heap) Push(n Coord) {
 	h.Vals = append(h.Vals, n)
 	for i := h.Len() / 2; i >= 0; i-- {
 		h.Heapify(i)
 	}
 }
 
-func (h *Heap) From(nums []int) {
+func (h *Heap) From(nums []Coord) {
 	for _, n := range nums {
 		h.Push(n)
 	}
