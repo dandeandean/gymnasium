@@ -18,9 +18,13 @@ func (h *MaxHeap) Pop() interface{} {
 	*h = old[0 : n-1]
 	return x
 }
+
+type timeyWimey struct {
+	ToGo, CanStartAgain int
+}
+
 func leastInterval(tasks []byte, n int) int {
 	h := &MaxHeap{}
-	//q := make([]int, 0)
 	count := make(map[byte]int, 0)
 	for _, t := range tasks {
 		count[t]++
@@ -28,13 +32,29 @@ func leastInterval(tasks []byte, n int) int {
 	for _, c := range count {
 		heap.Push(h, c)
 	}
-	fmt.Println(count, n)
-	fmt.Println(h, n)
-	return 42
+	t := 0
+	q := make([]timeyWimey, 0)
+	for h.Len() > 0 || len(q) > 0 {
+		if h.Len() > 0 {
+			toGo := heap.Pop(h).(int) - 1
+			if toGo > 0 {
+				canStartAgain := t + n
+				q = append(q, timeyWimey{ToGo: toGo, CanStartAgain: canStartAgain})
+			}
+		}
+		if len(q) > 0 && q[0].CanStartAgain <= t {
+			heap.Push(h, q[0].ToGo)
+			q = q[1:]
+		}
+		t++
+	}
+	return t
 }
 
 func main() {
-	tasks := []byte{'A', 'B', 'A'}
-	leastInterval(tasks, 1)
+	tasks := []byte{'A', 'A', 'A', 'B', 'B', 'B'}
+	fmt.Println(
+		leastInterval(tasks, 1),
+	)
 
 }
