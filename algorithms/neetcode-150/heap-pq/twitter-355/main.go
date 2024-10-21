@@ -2,12 +2,16 @@ package main
 
 type Set map[int]bool
 
-type Tweets []int
+type Tweet struct {
+	Time int
+	ID   int
+}
 
 type Twitter struct {
-	Users       Set            // Set of Users
-	Tweets      map[int]Tweets // UserID -> Tweets they've made
-	IsFollowing Set            // UserID -> set of Users they follow
+	Time        int
+	Users       Set             // Set of Users
+	Tweets      map[int][]Tweet // UserID -> Tweets they've made
+	IsFollowing map[int]Set     // UserID -> set of Users they follow ; call with map[follower][followee] ?
 }
 
 func Constructor() Twitter {
@@ -16,7 +20,10 @@ func Constructor() Twitter {
 }
 
 func (this *Twitter) PostTweet(userId int, tweetId int) {
-	this.Tweets[userId] = append(this.Tweets[userId], tweetId)
+	this.Tweets[userId] = append(
+		this.Tweets[userId],
+		Tweet{Time: this.Time, ID: tweetId},
+	)
 }
 
 func (this *Twitter) GetNewsFeed(userId int) []int {
@@ -24,12 +31,16 @@ func (this *Twitter) GetNewsFeed(userId int) []int {
 }
 
 func (this *Twitter) Follow(followerId int, followeeId int) {
-	this.IsFollowing[followerId] = true
+	this.IsFollowing[followerId][followeeId] = true
 
 }
 
 func (this *Twitter) Unfollow(followerId int, followeeId int) {
-	this.IsFollowing[followerId] = false
+	this.IsFollowing[followerId][followeeId] = false // just in case... I am a very superstitious fellow
+	delete(
+		this.IsFollowing[followerId],
+		followeeId,
+	)
 }
 
 /**
