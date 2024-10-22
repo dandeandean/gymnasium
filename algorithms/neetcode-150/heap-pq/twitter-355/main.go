@@ -24,15 +24,24 @@ func (this *Twitter) PostTweet(userId int, tweetId int) {
 		this.Tweets[userId],
 		Tweet{Time: this.Time, ID: tweetId},
 	)
+	this.Time++
 }
 
 func (this *Twitter) GetNewsFeed(userId int) []int {
+	following := this.IsFollowing[userId]
+	allTweets := make([]Tweet, 0)
+	for k, v := range following {
+		if v {
+			allTweets = append(allTweets, this.Tweets[k]...) // ... means slice to slice or something
+		}
+	}
+	this.Time++
 	return []int{69}
 }
 
 func (this *Twitter) Follow(followerId int, followeeId int) {
 	this.IsFollowing[followerId][followeeId] = true
-
+	this.Time++
 }
 
 func (this *Twitter) Unfollow(followerId int, followeeId int) {
@@ -41,6 +50,7 @@ func (this *Twitter) Unfollow(followerId int, followeeId int) {
 		this.IsFollowing[followerId],
 		followeeId,
 	)
+	this.Time++
 }
 
 /**
