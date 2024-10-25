@@ -31,7 +31,16 @@ func (this *Twitter) PostTweet(userId int, tweetId int) {
 
 func (this *Twitter) GetNewsFeed(userId int) []int {
 	following := this.IsFollowing[userId]
+	out := make([]int, 0)
 	h := &MaxHeap{}
+	if following == nil {
+		selfTweets := this.Tweets[userId]
+		for i := 0; i < len(selfTweets); i++ {
+			out = append(out, selfTweets[i].ID)
+		}
+		return out
+	}
+	following[userId] = true
 	for fID, v := range following {
 		if v {
 			theirTweets := this.Tweets[fID]
@@ -39,12 +48,10 @@ func (this *Twitter) GetNewsFeed(userId int) []int {
 			heap.Push(h, lastTweet)
 		}
 	}
-	out := make([]int, 0)
 	for h.Len() > 0 && len(out) < 10 {
 		tw := heap.Pop(h).(Tweet)
 		out = append(out, tw.ID)
-		// go back into their old Tweets
-		if tw.TwInd > 1 {
+		if tw.TwInd > 1 { // go back into their old Tweets
 			tw2 := this.Tweets[tw.UserID][tw.TwInd-1]
 			heap.Push(h, tw2)
 		}
@@ -53,6 +60,9 @@ func (this *Twitter) GetNewsFeed(userId int) []int {
 }
 
 func (this *Twitter) Follow(followerId int, followeeId int) {
+	if this.IsFollowing[followerId] == nil {
+		this.IsFollowing[followerId] = make(Set)
+	}
 	this.IsFollowing[followerId][followeeId] = true
 }
 
