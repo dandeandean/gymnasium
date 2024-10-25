@@ -1,21 +1,9 @@
 package main
 
-import "fmt"
-
-type Set map[int]bool
-
-type Tweet struct {
-	Time   int
-	ID     int
-	UserID int
-}
-
-type Twitter struct {
-	Time        int
-	Users       Set             // Set of Users
-	Tweets      map[int][]Tweet // UserID -> Tweets they've made
-	IsFollowing map[int]Set     // UserID -> set of Users they follow ; call with map[follower][followee] ?
-}
+import (
+	"container/heap"
+	"fmt"
+)
 
 func Constructor() Twitter {
 	X := Twitter{
@@ -28,20 +16,37 @@ func Constructor() Twitter {
 }
 
 func (this *Twitter) PostTweet(userId int, tweetId int) {
+	n := len(this.Tweets[userId])
 	this.Tweets[userId] = append(
 		this.Tweets[userId],
-		Tweet{Time: this.Time, ID: tweetId, UserID: userId},
+		Tweet{
+			Time:   this.Time,
+			ID:     tweetId,
+			UserID: userId,
+			TwInd:  n,
+		},
 	)
 	this.Time++
 }
 
 func (this *Twitter) GetNewsFeed(userId int) []int {
 	following := this.IsFollowing[userId]
-	allTweets := make([]Tweet, 0)
-	out := make([]int, 0)
-	for k, v := range following {
+	h := &MaxHeap{}
+	for fID, v := range following {
 		if v {
-			allTweets = append(allTweets, this.Tweets[k]...) // ... means slice to slice or something
+			theirTweets := this.Tweets[fID]
+			lastTweet := theirTweets[len(theirTweets)-1]
+			heap.Push(h, lastTweet)
+		}
+	}
+	out := make([]int, 0)
+	for h.Len() > 0 && len(out) < 10 {
+		tw := heap.Pop(h).(Tweet)
+		out = append(out, tw.ID)
+		// go back into their old Tweets
+		if tw.TwInd > 1 {
+			tw2 := this.Tweets[tw.UserID][tw.TwInd-1]
+			heap.Push(h, tw2)
 		}
 	}
 	return out
@@ -60,17 +65,11 @@ func (this *Twitter) Unfollow(followerId int, followeeId int) {
 }
 
 func main() {
-	/**
-	 * Your Twitter object will be instantiated and called as such:
-	 * obj := Constructor();
-	 * obj.PostTweet(userId,tweetId);
-	 * param_2 := obj.GetNewsFeed(userId);
-	 * obj.Follow(followerId,followeeId);
-	 * obj.Unfollow(followerId,followeeId);
-	 */
 	obj := Constructor()
-	obj.PostTweet(0, 0)
-	param_2 := obj.GetNewsFeed(0)
+	obj.PostTweet(5, 0)
+	obj.PostTweet(5, 1)
+	obj.PostTweet(5, 2)
+	param_2 := obj.GetNewsFeed(5)
 	fmt.Println(obj, param_2)
 
 }
