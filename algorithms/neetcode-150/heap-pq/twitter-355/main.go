@@ -44,8 +44,10 @@ func (this *Twitter) GetNewsFeed(userId int) []int {
 	for fID, v := range following {
 		if v {
 			theirTweets := this.Tweets[fID]
-			lastTweet := theirTweets[len(theirTweets)-1]
-			heap.Push(h, lastTweet)
+			if len(theirTweets) > 0 {
+				lastTweet := theirTweets[len(theirTweets)-1]
+				heap.Push(h, lastTweet)
+			}
 		}
 	}
 	for h.Len() > 0 && len(out) < 10 {
