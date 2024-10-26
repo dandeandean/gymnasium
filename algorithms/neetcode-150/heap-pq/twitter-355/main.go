@@ -35,8 +35,11 @@ func (this *Twitter) GetNewsFeed(userId int) []int {
 	h := &MaxHeap{}
 	if following == nil {
 		selfTweets := this.Tweets[userId]
-		for i := 0; i < len(selfTweets); i++ {
+		i, j := len(selfTweets)-1, 0
+		for i >= 0 && j < 10 {
 			out = append(out, selfTweets[i].ID)
+			i--
+			j++
 		}
 		return out
 	}
@@ -69,6 +72,9 @@ func (this *Twitter) Follow(followerId int, followeeId int) {
 }
 
 func (this *Twitter) Unfollow(followerId int, followeeId int) {
+	if this.IsFollowing[followerId] == nil {
+		return
+	}
 	this.IsFollowing[followerId][followeeId] = false // just in case... I am a very superstitious fellow
 	delete(
 		this.IsFollowing[followerId],
@@ -77,11 +83,21 @@ func (this *Twitter) Unfollow(followerId int, followeeId int) {
 }
 
 func main() {
+	//[null,null,null,[3,5]]
 	obj := Constructor()
-	obj.PostTweet(5, 0)
-	obj.PostTweet(5, 1)
-	obj.PostTweet(5, 2)
-	param_2 := obj.GetNewsFeed(5)
+	obj.PostTweet(1, 1)
+	obj.PostTweet(1, 2)
+	obj.PostTweet(1, 3)
+	obj.PostTweet(1, 4)
+	obj.PostTweet(1, 5)
+	obj.PostTweet(1, 6)
+	obj.PostTweet(1, 7)
+	obj.PostTweet(1, 8)
+	obj.PostTweet(1, 9)
+	obj.PostTweet(1, 10)
+	obj.PostTweet(1, 11)
+	obj.PostTweet(1, 12)
+	param_2 := obj.GetNewsFeed(1)
 	fmt.Println(obj, param_2)
 
 }
