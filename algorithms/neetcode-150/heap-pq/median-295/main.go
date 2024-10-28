@@ -27,25 +27,41 @@ func (this *MedianFinder) diffPiles() int {
 
 func (this *MedianFinder) AddNum(num int) {
 	heap.Push(this.SmallPile, num)
-	for this.diffPiles() > 1 && this.SmallPile.Len() > 0 {
+	if this.BigPile.Len() > 0 && this.BigPile.Peek().(int) < this.SmallPile.Peek().(int) {
 		out := heap.Pop(this.SmallPile)
 		heap.Push(this.BigPile, out)
 	}
+	if this.BigPile.Len() < this.SmallPile.Len()+1 {
+		out := heap.Pop(this.SmallPile)
+		heap.Push(this.BigPile, out)
+	}
+	if this.SmallPile.Len() > this.BigPile.Len()+1 {
+		out := heap.Pop(this.BigPile)
+		heap.Push(this.SmallPile, out)
+	}
+
 }
 
 func (this *MedianFinder) FindMedian() float64 {
 	if this.diffPiles() == 0 {
-		small, big := this.SmallPile.Peek().(float64), this.BigPile.Peek().(float64)
+		small, big := float64(this.SmallPile.Peek().(int)), float64(this.BigPile.Peek().(int))
 		return (small + big) / 2.0
 	}
-	return float64(this.SmallPile.data[0])
+	correctPile := this.SmallPile
+	if this.BigPile.Len() > this.SmallPile.Len() {
+		correctPile = this.BigPile
+	}
+	return float64(correctPile.Peek().(int))
 }
 
 func main() {
 	median := Constructor()
 	median.AddNum(1)
+	fmt.Println(median.SmallPile, median.BigPile)
 	median.AddNum(2)
-	fmt.Println(median.FindMedian())
+	fmt.Println(median.SmallPile, median.BigPile)
 	median.AddNum(3)
-	fmt.Println(median.FindMedian())
+	fmt.Println(median.SmallPile, median.BigPile)
+	median.AddNum(7)
+	fmt.Println(median.SmallPile, median.BigPile)
 }
