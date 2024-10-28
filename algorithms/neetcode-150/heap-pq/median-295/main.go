@@ -35,7 +35,7 @@ func (this *MedianFinder) AddNum(num int) {
 
 func (this *MedianFinder) FindMedian() float64 {
 	if this.diffPiles() == 0 {
-		small, big := float64(this.SmallPile.data[0]), float64(this.BigPile.data[0])
+		small, big := this.SmallPile.Peek().(float64), this.BigPile.Peek().(float64)
 		return (small + big) / 2.0
 	}
 	return float64(this.SmallPile.data[0])
@@ -45,5 +45,7 @@ func main() {
 	median := Constructor()
 	median.AddNum(1)
 	median.AddNum(2)
+	fmt.Println(median.FindMedian())
+	median.AddNum(3)
 	fmt.Println(median.FindMedian())
 }
