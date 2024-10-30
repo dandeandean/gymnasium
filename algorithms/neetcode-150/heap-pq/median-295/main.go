@@ -18,7 +18,7 @@ func Constructor() MedianFinder {
 }
 
 func (this *MedianFinder) diffPiles() (int, *MayHeap, *MayHeap) {
-	/// returns diff, larger, smaller
+	/// returns (diff, larger, smaller)
 	raw := this.SmallPile.Len() - this.BigPile.Len()
 	if raw < 0 {
 		return -raw, this.BigPile, this.SmallPile
@@ -42,16 +42,15 @@ func (this *MedianFinder) AddNum(num int) {
 }
 
 func (this *MedianFinder) FindMedian() float64 {
-	nDiff, _, _ := this.diffPiles()
-	fmt.Println(this.SmallPile.data, this.BigPile.data)
+	nDiff, larger, _ := this.diffPiles()
 	if nDiff == 0 {
 		small, big := float64(this.SmallPile.Peek().(int)), float64(this.BigPile.Peek().(int))
 		return (small + big) / 2.0
 	}
-	if this.SmallPile.Len() > 0 {
-		return float64(this.SmallPile.Peek().(int))
+	if larger.Len() > 0 {
+		return float64(larger.Peek().(int))
 	}
-	return float64(this.BigPile.Peek().(int))
+	return -69
 }
 
 func main() {
