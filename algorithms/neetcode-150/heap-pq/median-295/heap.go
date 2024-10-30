@@ -10,7 +10,7 @@ func (h MayHeap) Swap(i, j int)       { h.data[i], h.data[j] = h.data[j], h.data
 func (h *MayHeap) Push(x interface{}) { h.data = append(h.data, x.(int)) }
 
 func (h MayHeap) Peek() interface{} {
-	return h.data[h.Len()-1]
+	return h.data[0]
 }
 
 func (h MayHeap) Less(i, j int) bool {
