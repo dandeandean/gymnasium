@@ -1,17 +1,41 @@
 package main
 
-func dfs(i int, nums []int, curRes [][]int) [][]int {
-	curNums := make([]int, 0)
-	if i >= len(curNums) {
-		curRes = append(curRes, curNums)
-		return curRes
-	}
-	dfs(i+1, nums, curRes)
-	curNums = append(curNums, nums[i])
-	dfs(i+1, nums, curRes)
-	return curRes
+import (
+	"fmt"
+	"slices"
+)
+
+type Subsets struct {
+	Nums []int
+	Res  [][]int
 }
+
+func (s *Subsets) dfs(i int, subset []int) {
+	if i >= len(s.Nums) {
+		s.Res = append(s.Res, subset)
+		return
+	}
+	subsetPlus := append(subset, s.Nums[i])
+	slices.Sort(subsetPlus)
+	s.dfs(i+1, subsetPlus) // branch do append
+	s.dfs(i+1, subset)     // branch don't append
+}
+
 func subsets(nums []int) [][]int {
-	res := dfs(0, nums, make([][]int, 0))
-	return res
+	s := Subsets{
+		Nums: nums,
+		Res:  make([][]int, 0),
+	}
+	s.dfs(0, make([]int, 0))
+	return s.Res
+}
+
+func main() {
+	// 0 3 5 9 twice
+	wrong := subsets([]int{9, 0, 3, 5, 7})
+	fmt.Println(len(wrong))
+	for _, sl := range wrong {
+		fmt.Println(sl)
+	}
+
 }
