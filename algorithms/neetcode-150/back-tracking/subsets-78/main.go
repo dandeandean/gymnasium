@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"slices"
+	//"slices"
 )
 
 type Subsets struct {
@@ -15,10 +15,8 @@ func (s *Subsets) dfs(i int, subset []int) {
 		s.Res = append(s.Res, subset)
 		return
 	}
-	subsetPlus := append(subset, s.Nums[i])
-	slices.Sort(subsetPlus)
-	s.dfs(i+1, subsetPlus) // branch do append
-	s.dfs(i+1, subset)     // branch don't append
+	s.dfs(i+1, append(subset, s.Nums[i]))     // branch do append
+	s.dfs(i+1, append([]int(nil), subset...)) // branch don't append
 }
 
 func subsets(nums []int) [][]int {
