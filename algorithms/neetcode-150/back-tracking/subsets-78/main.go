@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	//"slices"
 )
 
 type Subsets struct {
@@ -29,7 +28,6 @@ func subsets(nums []int) [][]int {
 }
 
 func main() {
-	// 0 3 5 9 twice
 	wrong := subsets([]int{9, 0, 3, 5, 7})
 	fmt.Println(len(wrong))
 	for _, sl := range wrong {
