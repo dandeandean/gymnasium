@@ -14,7 +14,9 @@ func (s *Subsets) dfs(i int, subset []int) {
 		s.Res = append(s.Res, subset)
 		return
 	}
-	s.dfs(i+1, append(subset, s.Nums[i]))     // branch do append
+	s.dfs(i+1, append(subset, s.Nums[i])) // branch do append
+	// we want to make a copy... so we append to nil
+	// otherwise we will overwrite it will be a whole mess :(
 	s.dfs(i+1, append([]int(nil), subset...)) // branch don't append
 }
 
