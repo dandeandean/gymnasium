@@ -47,7 +47,7 @@ func dfs(c comb) {
 		c.res = append(c.res, c.dump())
 		return
 	}
-	if c.i > len(c.cand) || c.sum > c.target {
+	if c.i >= len(c.cand) || c.sum > c.target {
 		return
 	}
 	cLeft := c.take()
