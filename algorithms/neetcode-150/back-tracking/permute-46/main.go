@@ -1,11 +1,16 @@
 package main
 
+import "fmt"
+
 type ans struct {
 	res [][]int
 }
 
-// func swap(i, j int) { h.data[i], h.data[j] = h.data[j], h.data[i] }
-func (a ans) recurse(soFar []int, toGo []int) {
+func popIth(nums []int, i int) []int {
+	return append(nums[:i], nums[i+1:]...)
+}
+
+func (a *ans) recurse(soFar []int, toGo []int) {
 	if len(toGo) == 0 {
 		soFarCopy := append([]int(nil), soFar...)
 		a.res = append(a.res, soFarCopy)
@@ -13,20 +18,18 @@ func (a ans) recurse(soFar []int, toGo []int) {
 	for i := 0; i < len(toGo); i++ {
 		toGoCopy := append([]int(nil), toGo...)
 		soFarCopy := append(soFar, toGoCopy[i])
-		toGoCopy = toGoCopy[0:i]
-		if i+1 < len(toGo) {
-			toGoCopy = append(toGoCopy, toGoCopy[i+1:]...)
-		}
+		toGoCopy = popIth(toGoCopy, i)
 		a.recurse(soFarCopy, toGoCopy)
 	}
 }
 
 func permute(nums []int) [][]int {
-	A := ans{}
+	A := ans{make([][]int, 0)}
 	A.recurse([]int{}, nums)
 	return A.res
 }
 
 func main() {
-	permute([]int{1, 2})
+	fmt.Println(permute([]int{1, 2, 3}))
+	fmt.Println(permute([]int{1, 2}))
 }
