@@ -12,7 +12,6 @@ type state struct {
 
 func (s *state) curse(i int, subset []int) {
 	if i >= len(s.nums) {
-		fmt.Println(s.nums, subset)
 		s.res = append(s.res, subset)
 		return
 	}
