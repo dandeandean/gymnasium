@@ -67,13 +67,12 @@ func (b *Board) recurse(x, y, i int) bool {
 	if !b.inBounds(x, y) || b.beenTo(x, y) {
 		return false
 	}
-	if b.word[i] == b.getCoord(x, y).c {
+	if b.word[i] != b.getCoord(x, y).c {
 		return false
 	}
 	b.visit(x, y)
-	i++
-	res := b.recurse(x+1, y, i) || b.recurse(x-1, y, i) ||
-		b.recurse(x, y+1, i) || b.recurse(x, y-1, i)
+	res := b.recurse(x+1, y, i+1) || b.recurse(x-1, y, i+1) ||
+		b.recurse(x, y+1, i+1) || b.recurse(x, y-1, i+1)
 	b.unvisit(x, y)
 	return res
 }
@@ -91,6 +90,6 @@ func exist(board [][]byte, word string) bool {
 }
 func main() {
 	b := [][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}}
-	//fmt.Println(exist(b, "ABCCED"))
+	fmt.Println(exist(b, "ABCCED"))
 	fmt.Println(exist(b, "ABCB"))
 }
