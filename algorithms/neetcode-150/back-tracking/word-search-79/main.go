@@ -80,9 +80,17 @@ func (b *Board) recurse(x, y, i int) bool {
 
 func exist(board [][]byte, word string) bool {
 	b := boardFrom(board, word)
-	return b.recurse(0, 0, 0)
+	for i := range b.data {
+		for j := range b.data[i] {
+			if b.recurse(i, j, 0) {
+				return true
+			}
+		}
+	}
+	return false
 }
 func main() {
 	b := [][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}}
-	fmt.Println(exist(b, "ABCCED"))
+	//fmt.Println(exist(b, "ABCCED"))
+	fmt.Println(exist(b, "ABCB"))
 }
