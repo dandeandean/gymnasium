@@ -41,7 +41,7 @@ func (b Board) diagLClear(r, c int) bool {
 		r--
 		c++
 	}
-	for r < len(b)-1 && c < 0 {
+	for r < len(b)-1 && c > 0 {
 		if b[r][c] != '.' {
 			return false
 		}
@@ -52,11 +52,11 @@ func (b Board) diagLClear(r, c int) bool {
 }
 
 func (b Board) diagRClear(r, c int) bool {
-	for r > 0 && c < 0 { // cast up to the left
+	for r < len(b[0])-1 && c > 0 { // cast up to the right
 		r++
 		c--
 	}
-	for r < len(b)-1 && c < len(b[0])-1 {
+	for r > 0 && c < len(b[0])-1 {
 		if b[r][c] != '.' {
 			return false
 		}
@@ -89,10 +89,10 @@ func solveNQueens(n int) [][]string
 */
 func main() {
 	b := createBoard(4)
-	b.tryPlaceQ(1, 3)
-	b.tryPlaceQ(0, 1)
-	fmt.Println(b)
-	fmt.Println(
-		b.diagLClear(2, 2),
-	)
+	for i := range 4 {
+		for j := range 4 {
+			b.tryPlaceQ(i, j)
+		}
+		fmt.Println(b)
+	}
 }
