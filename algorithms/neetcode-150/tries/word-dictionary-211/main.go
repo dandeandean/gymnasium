@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type Node struct {
 	c     *rune
 	isEnd bool
@@ -36,17 +38,38 @@ func (this *WordDictionary) AddWord(word string) {
 	cur.isEnd = true
 }
 
-func (this *WordDictionary) nodeSearcher(n *Node, subWord string) *Node {
-	if n == nil || len(subWord) == 0 {
-		return nil
+func (this *WordDictionary) nodeSearcher(n *Node, subWord string) bool {
+	if subWord == "" {
+		return true
 	}
-	if n.next[int(subWord[0]-'a')] != nil {
+	if n == nil {
+		return false
 	}
+	cur := n
+	for _, c := range subWord {
+		if c == '.' {
+			for i := 0; i < 26; i++ {
+				if this.nodeSearcher(n.next[i], subWord[1:]) {
+					return true
+				}
+			}
+			return false
+		} else {
+			get := cur.next[int(c-rune('a'))]
+			if get == nil {
+				return false
+			}
+		}
+	}
+	return cur.isEnd
 }
 
 func (this *WordDictionary) Search(word string) bool {
+	return this.nodeSearcher(this.root, word)
 }
 
 func main() {
-	return
+	wd := Constructor()
+	wd.AddWord("hello")
+	fmt.Println(wd.Search("hello"))
 }
