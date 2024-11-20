@@ -71,6 +71,10 @@ func (this *WordDictionary) Search(word string) bool {
 
 func main() {
 	wd := Constructor()
-	wd.AddWord("hello")
-	fmt.Println(wd.Search("hel.ou"))
+	wd.AddWord("a")
+	fmt.Println(
+		wd.Search("aa"),
+		wd.Search(".a"),
+		wd.Search("a."),
+	)
 }
