@@ -55,10 +55,11 @@ func (this *WordDictionary) nodeSearcher(n *Node, subWord string) bool {
 			}
 			return false
 		} else {
-			get := cur.next[int(c-rune('a'))]
-			if get == nil {
+			i := int(c - rune('a'))
+			if cur.next[i] == nil {
 				return false
 			}
+			cur = cur.next[i]
 		}
 	}
 	return cur.isEnd
@@ -71,5 +72,5 @@ func (this *WordDictionary) Search(word string) bool {
 func main() {
 	wd := Constructor()
 	wd.AddWord("hello")
-	fmt.Println(wd.Search("hello"))
+	fmt.Println(wd.Search("hel.ou"))
 }
