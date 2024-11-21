@@ -22,7 +22,7 @@ type WordDictionary struct {
 
 func Constructor() WordDictionary {
 	return WordDictionary{
-		root: newNode(0),
+		root: newNode(69),
 	}
 }
 
@@ -32,7 +32,6 @@ func (this *WordDictionary) AddWord(word string) {
 		i := int(c - rune('a'))
 		if cur.next[i] == nil {
 			cur.next[i] = newNode(c)
-			println(string(c), &cur.next[i])
 		}
 		cur = cur.next[i]
 	}
@@ -47,6 +46,7 @@ func (this *WordDictionary) nodeSearcher(n *Node, subWord string) bool {
 	fmt.Println("searching: ", subWord, n)
 	cur := n
 	for _, c := range subWord {
+		fmt.Println("considering:", string(c))
 		if c == '.' {
 			for i := 0; i < 26; i++ {
 				if this.nodeSearcher(n.next[i], subWord[1:]) {
@@ -56,6 +56,7 @@ func (this *WordDictionary) nodeSearcher(n *Node, subWord string) bool {
 			return false
 		} else {
 			i := int(c - rune('a'))
+			fmt.Println("i = ", i, &cur.next[i])
 			if cur.next[i] == nil {
 				return false
 			}
