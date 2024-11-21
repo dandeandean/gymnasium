@@ -3,12 +3,12 @@ package main
 import "fmt"
 
 type Node struct {
-	c     *rune
+	c     rune
 	isEnd bool
 	next  [26]*Node
 }
 
-func newNode(c *rune) *Node {
+func newNode(c rune) *Node {
 	return &Node{
 		c:     c,
 		isEnd: false,
@@ -22,7 +22,7 @@ type WordDictionary struct {
 
 func Constructor() WordDictionary {
 	return WordDictionary{
-		root: newNode(nil),
+		root: newNode(0),
 	}
 }
 
@@ -31,7 +31,8 @@ func (this *WordDictionary) AddWord(word string) {
 	for _, c := range word {
 		i := int(c - rune('a'))
 		if cur.next[i] == nil {
-			cur.next[i] = newNode(&c)
+			cur.next[i] = newNode(c)
+			println(string(c), &cur.next[i])
 		}
 		cur = cur.next[i]
 	}
@@ -39,12 +40,11 @@ func (this *WordDictionary) AddWord(word string) {
 }
 
 func (this *WordDictionary) nodeSearcher(n *Node, subWord string) bool {
-	if subWord == "" {
-		return true
-	}
 	if n == nil {
 		return false
 	}
+	println("at node:", n, string(n.c))
+	fmt.Println("searching: ", subWord, n)
 	cur := n
 	for _, c := range subWord {
 		if c == '.' {
@@ -71,10 +71,12 @@ func (this *WordDictionary) Search(word string) bool {
 
 func main() {
 	wd := Constructor()
-	wd.AddWord("a")
+	wd.AddWord("at")
+	wd.AddWord("and")
+	wd.AddWord("an")
+	wd.AddWord("add")
+	wd.AddWord("bat")
 	fmt.Println(
-		wd.Search("aa"),
-		wd.Search(".a"),
-		wd.Search("a."),
+		wd.Search("b."),
 	)
 }
