@@ -22,7 +22,7 @@ type WordDictionary struct {
 
 func Constructor() WordDictionary {
 	return WordDictionary{
-		root: newNode(69),
+		root: newNode(rune('R')),
 	}
 }
 
@@ -42,27 +42,31 @@ func (this *WordDictionary) nodeSearcher(n *Node, subWord string) bool {
 	if n == nil {
 		return false
 	}
-	println("at node:", n, string(n.c))
-	fmt.Println("searching: ", subWord, n)
 	cur := n
 	for _, c := range subWord {
-		fmt.Println("considering:", string(c))
+		fmt.Println("!!", len(subWord), subWord)
 		if c == '.' {
 			for i := 0; i < 26; i++ {
-				if this.nodeSearcher(n.next[i], subWord[1:]) {
-					return true
+				if cur.next[i] != nil {
+					fmt.Println("recurse: ", cur.next[i], subWord[1:])
+					if this.nodeSearcher(cur.next[i], subWord[1:]) {
+						return true
+					}
 				}
 			}
 			return false
 		} else {
 			i := int(c - rune('a'))
-			fmt.Println("i = ", i, &cur.next[i])
 			if cur.next[i] == nil {
 				return false
 			}
 			cur = cur.next[i]
+			fmt.Println("word:", subWord)
+			print("at node:", string(cur.c))
+			fmt.Println("->", cur.next)
 		}
 	}
+	fmt.Println("exiting: ", cur)
 	return cur.isEnd
 }
 
@@ -78,6 +82,10 @@ func main() {
 	wd.AddWord("add")
 	wd.AddWord("bat")
 	fmt.Println(
-		wd.Search("b."),
+		wd.Search("b."), // we should only consider 'a' after 'b'
+	)
+	wd.AddWord("be")
+	fmt.Println(
+		wd.Search("b."), // we should only consider 'a' after 'b'
 	)
 }
