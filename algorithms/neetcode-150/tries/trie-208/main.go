@@ -30,7 +30,6 @@ func (this *Trie) Insert(word string) {
 		i := int(c - rune('a'))
 		if cur.next[i] == nil {
 			cur.next[i] = newNode(c, false)
-
 		}
 		cur = cur.next[i]
 	}
