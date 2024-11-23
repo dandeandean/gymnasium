@@ -22,7 +22,7 @@ type WordDictionary struct {
 
 func Constructor() WordDictionary {
 	return WordDictionary{
-		root: newNode(rune('R')),
+		root: newNode(rune('~')),
 	}
 }
 
@@ -38,36 +38,54 @@ func (this *WordDictionary) AddWord(word string) {
 	cur.isEnd = true
 }
 
+func (n Node) getChildren() []*Node {
+	out := make([]*Node, 0, 26)
+	for i := 0; i < 26; i++ {
+		if n.next[i] != nil {
+			out = append(out, n.next[i])
+		}
+	}
+	return out
+}
+
+func printNode(n Node) {
+	fmt.Print(
+		"NODE: (",
+		string(n.c),
+		"->",
+	)
+	fmt.Print("[")
+	for _, ch := range n.getChildren() {
+		fmt.Print("", string(ch.c))
+	}
+	fmt.Println("])")
+}
+
 func (this *WordDictionary) nodeSearcher(n *Node, subWord string) bool {
+	// simply try to access the next node in line
 	if n == nil {
 		return false
 	}
-	cur := n
-	for _, c := range subWord {
-		fmt.Println("!!", len(subWord), subWord)
-		if c == '.' {
-			for i := 0; i < 26; i++ {
-				if cur.next[i] != nil {
-					fmt.Println("recurse: ", cur.next[i], subWord[1:])
-					if this.nodeSearcher(cur.next[i], subWord[1:]) {
-						return true
-					}
-				}
-			}
-			return false
-		} else {
-			i := int(c - rune('a'))
-			if cur.next[i] == nil {
-				return false
-			}
-			cur = cur.next[i]
-			fmt.Println("word:", subWord)
-			print("at node:", string(cur.c))
-			fmt.Println("->", cur.next)
+	if len(subWord) == 0 {
+		if n.isEnd {
+			return true
 		}
+		return false
 	}
-	fmt.Println("exiting: ", cur)
-	return cur.isEnd
+	i := int(rune(subWord[0]) - rune('a'))
+	if i > 25 || i < 0 {
+		for _, ch := range n.getChildren() {
+			if this.nodeSearcher(ch, subWord[1:]) {
+				return true
+			}
+		}
+	} else {
+		if n.next[i] == nil {
+			return false
+		}
+		return this.nodeSearcher(n.next[i], subWord[1:])
+	}
+	return n.isEnd
 }
 
 func (this *WordDictionary) Search(word string) bool {
@@ -76,16 +94,8 @@ func (this *WordDictionary) Search(word string) bool {
 
 func main() {
 	wd := Constructor()
-	wd.AddWord("at")
-	wd.AddWord("and")
-	wd.AddWord("an")
-	wd.AddWord("add")
-	wd.AddWord("bat")
+	wd.AddWord("a")
 	fmt.Println(
-		wd.Search("b."), // we should only consider 'a' after 'b'
-	)
-	wd.AddWord("be")
-	fmt.Println(
-		wd.Search("b."), // we should only consider 'a' after 'b'
+		wd.Search("a."),
 	)
 }
