@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 type Node struct {
-	c     *rune
+	c     rune
 	isEnd bool
 	next  [26]*Node
 }
@@ -12,7 +12,7 @@ type Trie struct {
 	root *Node
 }
 
-func newNode(c *rune, isEnd bool) *Node {
+func newNode(c rune, isEnd bool) *Node {
 	return &Node{
 		c:     c,
 		isEnd: isEnd,
@@ -21,7 +21,7 @@ func newNode(c *rune, isEnd bool) *Node {
 }
 
 func Constructor() Trie {
-	return Trie{root: newNode(nil, false)}
+	return Trie{root: newNode('~', false)}
 }
 
 func (this *Trie) Insert(word string) {
@@ -29,7 +29,7 @@ func (this *Trie) Insert(word string) {
 	for _, c := range word {
 		i := int(c - rune('a'))
 		if cur.next[i] == nil {
-			cur.next[i] = newNode(&c, false)
+			cur.next[i] = newNode(c, false)
 
 		}
 		cur = cur.next[i]
