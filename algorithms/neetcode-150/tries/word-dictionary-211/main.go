@@ -2,6 +2,14 @@ package main
 
 import "fmt"
 
+func main() {
+	wd := Constructor()
+	wd.AddWord("a")
+	fmt.Println(
+		wd.Search("a."),
+	)
+}
+
 type Node struct {
 	c     rune
 	isEnd bool
@@ -48,19 +56,6 @@ func (n Node) getChildren() []*Node {
 	return out
 }
 
-func printNode(n Node) {
-	fmt.Print(
-		"NODE: (",
-		string(n.c),
-		"->",
-	)
-	fmt.Print("[")
-	for _, ch := range n.getChildren() {
-		fmt.Print("", string(ch.c))
-	}
-	fmt.Println("])")
-}
-
 func (this *WordDictionary) nodeSearcher(n *Node, subWord string) bool {
 	// simply try to access the next node in line
 	if n == nil {
@@ -74,15 +69,11 @@ func (this *WordDictionary) nodeSearcher(n *Node, subWord string) bool {
 	}
 	i := int(rune(subWord[0]) - rune('a'))
 	if i > 25 || i < 0 {
-		fmt.Println(n.getChildren())
 		for _, ch := range n.getChildren() {
 			if this.nodeSearcher(ch, subWord[1:]) {
 				return true
 			}
 		}
-		return false
-	}
-	if n.next[i] == nil {
 		return false
 	}
 	return this.nodeSearcher(n.next[i], subWord[1:])
@@ -92,10 +83,15 @@ func (this *WordDictionary) Search(word string) bool {
 	return this.nodeSearcher(this.root, word)
 }
 
-func main() {
-	wd := Constructor()
-	wd.AddWord("a")
-	fmt.Println(
-		wd.Search("a."),
+func printNode(n Node) {
+	fmt.Print(
+		"NODE: (",
+		string(n.c),
+		"->",
 	)
+	fmt.Print("[")
+	for _, ch := range n.getChildren() {
+		fmt.Print("", string(ch.c))
+	}
+	fmt.Println("])")
 }
