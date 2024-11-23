@@ -74,18 +74,18 @@ func (this *WordDictionary) nodeSearcher(n *Node, subWord string) bool {
 	}
 	i := int(rune(subWord[0]) - rune('a'))
 	if i > 25 || i < 0 {
+		fmt.Println(n.getChildren())
 		for _, ch := range n.getChildren() {
 			if this.nodeSearcher(ch, subWord[1:]) {
 				return true
 			}
 		}
-	} else {
-		if n.next[i] == nil {
-			return false
-		}
-		return this.nodeSearcher(n.next[i], subWord[1:])
+		return false
 	}
-	return n.isEnd
+	if n.next[i] == nil {
+		return false
+	}
+	return this.nodeSearcher(n.next[i], subWord[1:])
 }
 
 func (this *WordDictionary) Search(word string) bool {
