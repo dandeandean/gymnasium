@@ -57,7 +57,6 @@ func (n Node) getChildren() []*Node {
 }
 
 func (this *WordDictionary) nodeSearcher(n *Node, subWord string) bool {
-	// simply try to access the next node in line
 	if n == nil {
 		return false
 	}
