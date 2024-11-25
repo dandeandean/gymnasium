@@ -49,8 +49,19 @@ func (this *Trie) Search(word string) bool {
 func findWords(board [][]byte, words []string) []string {
 	// do word search i but with a trie
 	trie := Trie{root: newNode('~', false)}
+	ROWS, COLS := len(board), len(board[0])
 	for _, word := range words {
 		trie.Insert(word)
 	}
-	return []string{"foobar"}
+	res := make([]string, 0)
+	var dfs func(r int, c int, n *Node, word string) bool
+	dfs = func(r int, c int, n *Node, word string) bool {
+		return true
+	}
+	for r := 0; r < ROWS; r++ {
+		for c := 0; r < COLS; c++ {
+			dfs(r, c, trie.root, "")
+		}
+	}
+
 }
