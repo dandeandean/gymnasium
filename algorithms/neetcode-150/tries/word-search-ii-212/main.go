@@ -54,14 +54,32 @@ func findWords(board [][]byte, words []string) []string {
 		trie.Insert(word)
 	}
 	res := make([]string, 0)
-	var dfs func(r int, c int, n *Node, word string) bool
-	dfs = func(r int, c int, n *Node, word string) bool {
-		return true
+	beenTo := make(map[[2]int]bool)
+	var dfs func(r int, c int, n *Node, word string)
+	dfs = func(r int, c int, n *Node, word string) {
+		if r < 0 || c < 0 || r >= ROWS || c >= COLS {
+			return
+		}
+		if beenTo[[2]int{r, c}] || n.next[rune(board[r][c])-rune('a')] == nil {
+			return
+		}
+		beenTo[[2]int{r, c}] = true
+		word += string(board[r][c])
+		n = n.next[rune(board[r][c])-rune('a')]
+		if n.isEnd {
+			res = append(res, word)
+		}
+		dfs(r+1, c, n, word)
+		dfs(r-1, c, n, word)
+		dfs(r, c+1, n, word)
+		dfs(r, c-1, n, word)
+		beenTo[[2]int{r, c}] = false
+		return
 	}
 	for r := 0; r < ROWS; r++ {
 		for c := 0; r < COLS; c++ {
 			dfs(r, c, trie.root, "")
 		}
 	}
-
+	return res
 }
