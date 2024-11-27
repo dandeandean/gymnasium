@@ -1,9 +1,18 @@
 package main
 
+import "fmt"
+
+func main() {
+	board := [][]byte{{'o', 'a', 'a', 'n'}, {'e', 't', 'a', 'e'}, {'i', 'h', 'k', 'r'}, {'i', 'f', 'l', 'v'}}
+	words := []string{"oath", "pea", "eat", "rain"}
+	fmt.Println(findWords(board, words))
+}
+
 type Node struct {
 	c     rune
 	isEnd bool
 	next  [26]*Node
+	spent bool
 }
 
 type Trie struct {
@@ -18,10 +27,6 @@ func newNode(c rune, isEnd bool) *Node {
 	}
 }
 
-func Constructor() Trie {
-	return Trie{root: newNode('~', false)}
-}
-
 func (this *Trie) Insert(word string) {
 	cur := this.root
 	for _, c := range word {
@@ -32,6 +37,7 @@ func (this *Trie) Insert(word string) {
 		cur = cur.next[i]
 	}
 	cur.isEnd = true
+	cur.spent = false
 }
 
 func (this *Trie) Search(word string) bool {
@@ -66,8 +72,9 @@ func findWords(board [][]byte, words []string) []string {
 		beenTo[[2]int{r, c}] = true
 		word += string(board[r][c])
 		n = n.next[rune(board[r][c])-rune('a')]
-		if n.isEnd {
+		if n.isEnd && !n.spent {
 			res = append(res, word)
+			n.spent = true
 		}
 		dfs(r+1, c, n, word)
 		dfs(r-1, c, n, word)
@@ -77,7 +84,7 @@ func findWords(board [][]byte, words []string) []string {
 		return
 	}
 	for r := 0; r < ROWS; r++ {
-		for c := 0; r < COLS; c++ {
+		for c := 0; c < COLS; c++ {
 			dfs(r, c, trie.root, "")
 		}
 	}
