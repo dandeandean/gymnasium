@@ -56,7 +56,6 @@ func (c coord) isLand() bool {
 func (g *grid) bfs(r, c int) {
 	q := make([]*coord, 0)
 	q = append(q, g.coordFrom(r, c))
-	fmt.Println(g)
 	for len(q) > 0 {
 		cur := q[0]
 		q = q[1:]
@@ -67,7 +66,6 @@ func (g *grid) bfs(r, c int) {
 			}
 		}
 	}
-	fmt.Println(g)
 }
 
 func numIslands(grid [][]byte) int {
