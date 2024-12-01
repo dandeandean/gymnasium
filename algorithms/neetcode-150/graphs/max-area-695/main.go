@@ -1,5 +1,19 @@
 package main
 
+import "fmt"
+
+func main() {
+	g := [][]int{
+		{1, 1, 0, 0},
+		{0, 1, 1, 0},
+		{0, 0, 0, 0},
+		{0, 1, 1, 0},
+	}
+	fmt.Println(
+		maxAreaOfIsland(g),
+	)
+}
+
 func maxAreaOfIsland(grid [][]int) int {
 	var bfs func(r, c int) int
 	bfs = func(r, c int) int {
@@ -16,10 +30,10 @@ func maxAreaOfIsland(grid [][]int) int {
 				dx, dy := v[0], v[1]
 				cNew := cr + dx
 				rNew := cc + dy
-				if cNew > 0 && cNew < len(grid) && rNew > 0 && rNew < len(grid[cNew]) && grid[cNew][rNew] == '1'{
-						grid[cNew][rNew] = '0'
-						count += 1
-					}
+				isValid := cNew > 0 && cNew < len(grid) && rNew > 0 && rNew < len(grid[cNew])
+				if isValid {
+					count += grid[cNew][rNew]
+					grid[cNew][rNew] = 0
 				}
 			}
 		}
