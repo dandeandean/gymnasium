@@ -5,8 +5,8 @@ import "fmt"
 func main() {
 	g := [][]int{
 		{2, 1, 1},
-		{1, 1, 0},
-		{0, 1, 1},
+		{1, 1, 1},
+		{0, 1, 2},
 	}
 	g1 := [][]int{
 		{2, 1, 0},
@@ -46,20 +46,25 @@ func (g *graph) bfs(r, c int) int {
 	for len(q) > 0 {
 		cur := q[0]
 		q = q[1:]
+		wrote := false
 		for _, d := range dirs {
 			newCoord := coord{cur[0] + d[0], cur[1] + d[1]}
 			if g.isFresh(newCoord) {
 				g.drainLiveForce(newCoord)
 				q = append(q, newCoord)
+				wrote = true
 			}
 		}
-		res++
+		if wrote {
+			res++
+		}
+		fmt.Println(res, g)
 	}
 	return res
 }
 
 func orangesRotting(grid [][]int) int {
-	count := -1
+	count := 0
 	g := graph(grid)
 	for r := range g {
 		for c := range g[r] {
@@ -71,6 +76,12 @@ func orangesRotting(grid [][]int) int {
 			}
 		}
 	}
-	fmt.Println(g)
+	for r := range g {
+		for c := range g[r] {
+			if g[r][c] == 1 {
+				return -1
+			}
+		}
+	}
 	return count
 }
