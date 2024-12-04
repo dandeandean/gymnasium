@@ -11,7 +11,7 @@ func main() {
 	g1 := [][]int{
 		{2, 1, 0},
 		{0, 1, 1},
-		{1, 0, 1},
+		{0, 0, 1},
 	}
 	fmt.Println(
 		orangesRotting(g),
@@ -36,8 +36,22 @@ func (g *graph) drainLiveForce(c coord) {
 	(*g)[c[0]][c[1]] = 2
 }
 
-func (g *graph) bfs(r, c int) int {
-	q := []coord{{r, c}}
+func (g graph) show() {
+	for r := range g {
+		fmt.Println(g[r])
+	}
+}
+
+func orangesRotting(grid [][]int) int {
+	g := graph(grid)
+	q := make([]coord, 0)
+	for r := range g {
+		for c := range g[r] {
+			if g[r][c] == 2 {
+				q = append(q, coord{r, c})
+			}
+		}
+	}
 	dirs := [4]coord{
 		{-1, 0}, {0, -1},
 		{0, 1}, {1, 0},
@@ -55,26 +69,12 @@ func (g *graph) bfs(r, c int) int {
 				wrote = true
 			}
 		}
-		if wrote {
-			res++
+		if !wrote {
+			return res
 		}
-		fmt.Println(res, g)
-	}
-	return res
-}
-
-func orangesRotting(grid [][]int) int {
-	count := 0
-	g := graph(grid)
-	for r := range g {
-		for c := range g[r] {
-			if g[r][c] == 2 {
-				rotting := g.bfs(r, c)
-				if rotting > count {
-					count = rotting
-				}
-			}
-		}
+		res++
+		fmt.Println(res)
+		g.show()
 	}
 	for r := range g {
 		for c := range g[r] {
@@ -83,5 +83,5 @@ func orangesRotting(grid [][]int) int {
 			}
 		}
 	}
-	return count
+	return res
 }
