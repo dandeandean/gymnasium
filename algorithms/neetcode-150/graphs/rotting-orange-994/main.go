@@ -45,8 +45,12 @@ func (g graph) show() {
 func orangesRotting(grid [][]int) int {
 	g := graph(grid)
 	q := make([]coord, 0)
+	fresh := 0
 	for r := range g {
 		for c := range g[r] {
+			if g[r][c] == 1 {
+				fresh++
+			}
 			if g[r][c] == 2 {
 				q = append(q, coord{r, c})
 			}
@@ -56,32 +60,24 @@ func orangesRotting(grid [][]int) int {
 		{-1, 0}, {0, -1},
 		{0, 1}, {1, 0},
 	}
-	res := 0
-	for len(q) > 0 {
-		cur := q[0]
-		q = q[1:]
-		wrote := false
-		for _, d := range dirs {
-			newCoord := coord{cur[0] + d[0], cur[1] + d[1]}
-			if g.isFresh(newCoord) {
-				g.drainLiveForce(newCoord)
-				q = append(q, newCoord)
-				wrote = true
+	clock := 0
+	for len(q) > 0 && fresh > 0 {
+		for range q {
+			cur := q[0]
+			q = q[1:]
+			for _, d := range dirs {
+				newCoord := coord{cur[0] + d[0], cur[1] + d[1]}
+				if g.isFresh(newCoord) {
+					g.drainLiveForce(newCoord)
+					q = append(q, newCoord)
+					fresh--
+				}
 			}
 		}
-		if !wrote {
-			return res
-		}
-		res++
-		fmt.Println(res)
-		g.show()
+		clock++
 	}
-	for r := range g {
-		for c := range g[r] {
-			if g[r][c] == 1 {
-				return -1
-			}
-		}
+	if fresh == 0 {
+		return clock
 	}
-	return res
+	return -1
 }
