@@ -1,9 +1,0 @@
-package main
-
-var (
-	WALL = 2147483647
-)
-
-func islandsAndTreasure(grid [][]int) {
-
-}
