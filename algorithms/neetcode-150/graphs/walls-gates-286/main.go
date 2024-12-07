@@ -17,8 +17,8 @@ func main() {
 		{2147483647, 2147483647},
 	}
 	islandsAndTreasure(mapa)
+	fmt.Println("---")
 	islandsAndTreasure(mapb)
-	//fmt.Println(mapa, mapb)
 }
 
 func islandsAndTreasure(grid [][]int) {
@@ -43,8 +43,8 @@ func islandsAndTreasure(grid [][]int) {
 				co[0] + d[0],
 				co[1] + d[1],
 			}
-			fmt.Println(co, co2)
-			if g.canWalk(co2) {
+			if !g.beenTo(co2) && g.isValid(co2) {
+				//fmt.Println(co2)
 				q.push(co2)
 				g.set(co2, g[co[0]][co[1]]+1)
 			}
@@ -89,6 +89,10 @@ func (g grid) canWalk(c coord) bool {
 
 func (g grid) isTreasure(c coord) bool {
 	return g.isValid(c) && g[c[0]][c[1]] == GOAL
+}
+
+func (g grid) beenTo(c coord) bool {
+	return g.isValid(c) && g[c[0]][c[1]] != EMPTY
 }
 
 func (g grid) get(c coord) int {
