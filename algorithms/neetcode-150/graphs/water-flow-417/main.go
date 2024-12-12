@@ -2,6 +2,15 @@ package main
 
 import "fmt"
 
+func main() {
+	mapa := [][]int{
+		{4, 2, 7, 3, 4},
+		{7, 4, 6, 4, 7},
+		{6, 3, 5, 3, 6},
+	}
+	pacificAtlantic(mapa)
+}
+
 type cell struct {
 	c   coord
 	h   int
@@ -92,5 +101,11 @@ func (g *grid) bfs(c coord, isAtl bool) {
 func pacificAtlantic(heights [][]int) [][]int {
 	g := gridFromHeights(heights)
 	fmt.Println(g.atlDrain)
+	nrow, ncol := len(heights), len(heights[0])
+	atl, pac := true, false
+	for c := range ncol {
+		g.bfs(coord{0, c}, atl)
+		g.bfs(coord{nrow - 1, c}, pac)
+	}
 	return heights
 }
