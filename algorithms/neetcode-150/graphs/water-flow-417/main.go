@@ -66,6 +66,19 @@ func (g *grid) setPac(c coord) {
 	}
 }
 
+func (g grid) getAtl(c coord) bool {
+	if g.inBounds(c) {
+		return g.get(c).alt
+	}
+	return false
+}
+
+func (g grid) getPac(c coord) bool {
+	if g.inBounds(c) {
+		return g.get(c).pac
+	}
+	return false
+}
 func (g grid) get(c coord) *cell {
 	if !g.inBounds(c) {
 		return nil
@@ -74,11 +87,11 @@ func (g grid) get(c coord) *cell {
 }
 
 func (g *grid) bfs(c coord, isAtl bool) {
-	var writeToG func(coord)
+	writeToG := g.setPac
+	beenTo := g.getPac
 	if isAtl {
 		writeToG = g.setAtl
-	} else {
-		writeToG = g.setPac
+		beenTo = g.getAtl
 	}
 	q := []coord{c}
 	for len(q) > 0 {
@@ -87,7 +100,7 @@ func (g *grid) bfs(c coord, isAtl bool) {
 		for _, v := range [][]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}} {
 			cNew := coord{v[0] + cur[0], v[1] + cur[1]}
 			cellNew := g.get(cNew)
-			if cellNew == nil || cellNew.alt || cellNew.pac {
+			if cellNew == nil || beenTo(c) {
 				continue
 			}
 			if g.heightAt(cNew) >= g.heightAt(c) {
