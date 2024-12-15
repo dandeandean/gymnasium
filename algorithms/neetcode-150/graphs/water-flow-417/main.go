@@ -39,7 +39,6 @@ func pacificAtlantic(heights [][]int) [][]int {
 		for len(q) > 0 {
 			cur := q[0]
 			q = q[1:]
-			fmt.Println(cur)
 			res[cur[0]][cur[1]] = true
 			for _, d := range [][]int{{1, 0}, {0, 1}, {-1, 0}, {0, -1}} {
 				cNew := coord{d[0] + cur[0], d[1] + cur[1]}
@@ -63,10 +62,8 @@ func pacificAtlantic(heights [][]int) [][]int {
 		startAtl = append(startAtl, coord{rowLen - 1, c})
 	}
 	// bfs from right & bottom (Atl)
-	fmt.Println(startPac, startAtl)
 	pacMap := bfs(startPac)
 	atlMap := bfs(startAtl)
-	fmt.Println(pacMap, atlMap)
 	res := make([][]int, 0)
 	for i := range pacMap {
 		for j := range pacMap[i] {
