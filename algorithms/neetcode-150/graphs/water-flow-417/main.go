@@ -8,117 +8,57 @@ func main() {
 		{7, 4, 6, 4, 7},
 		{6, 3, 5, 3, 6},
 	}
-	pacificAtlantic(mapa)
-}
-
-type cell struct {
-	c   coord
-	h   int
-	alt bool
-	pac bool
-}
-
-type grid struct {
-	heights  [][]cell
-	pacDrain []coord
-	atlDrain []coord
+	fmt.Println(
+		pacificAtlantic(mapa),
+	)
 }
 
 type coord [2]int
 
-func gridFromHeights(heights [][]int) grid {
-	g := grid{}
-	for r := range heights {
-		row := make([]cell, len(heights[r]))
-		for c := range heights[r] {
-			row[c] = cell{
-				c: coord{r, c},
-				h: heights[r][c],
-			}
-		}
-		g.heights = append(g.heights, row)
-	}
-	return g
-}
-
-func (g grid) inBounds(c coord) bool {
-	return c[0] > 0 && c[0] < len(g.heights) && c[1] > 0 && c[1] < len(g.heights[0])
-}
-
-func (g grid) heightAt(c coord) int {
-	if g.inBounds(c) == false {
-		return -1
-	}
-	return g.heights[c[0]][c[1]].h
-}
-
-func (g *grid) setAtl(c coord) {
-	if g.inBounds(c) {
-		(*g).heights[c[0]][c[1]].alt = true
-		(*g).atlDrain = append((*g).atlDrain, c)
-	}
-}
-
-func (g *grid) setPac(c coord) {
-	if g.inBounds(c) {
-		(*g).heights[c[0]][c[1]].pac = true
-		(*g).pacDrain = append((*g).pacDrain, c)
-	}
-}
-
-func (g grid) getAtl(c coord) bool {
-	if g.inBounds(c) {
-		return g.get(c).alt
-	}
-	return false
-}
-
-func (g grid) getPac(c coord) bool {
-	if g.inBounds(c) {
-		return g.get(c).pac
-	}
-	return false
-}
-func (g grid) get(c coord) *cell {
-	if !g.inBounds(c) {
-		return nil
-	}
-	return &g.heights[c[0]][c[1]]
-}
-
-func (g *grid) bfs(c coord, isAtl bool) {
-	writeToG := g.setPac
-	beenTo := g.getPac
-	if isAtl {
-		writeToG = g.setAtl
-		beenTo = g.getAtl
-	}
-	q := []coord{c}
-	for len(q) > 0 {
-		cur := q[0]
-		q = q[1:]
-		for _, v := range [][]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}} {
-			cNew := coord{v[0] + cur[0], v[1] + cur[1]}
-			cellNew := g.get(cNew)
-			if cellNew == nil || beenTo(c) {
-				continue
-			}
-			if g.heightAt(cNew) >= g.heightAt(c) {
-				q = append(q, cNew)
-				writeToG(cNew)
-			}
-		}
-	}
-}
-
 func pacificAtlantic(heights [][]int) [][]int {
-	g := gridFromHeights(heights)
-	fmt.Println(g.atlDrain)
-	nrow, ncol := len(heights), len(heights[0])
-	atl, pac := true, false
-	for c := range ncol {
-		g.bfs(coord{0, c}, atl)
-		g.bfs(coord{nrow - 1, c}, pac)
+	rowLen, colLen := len(heights), len(heights[0])
+	bfs := func(startingCoords []coord) [][]bool {
+		res := make([][]bool, rowLen)
+		for i := range res {
+			res[i] = make([]bool, colLen)
+		}
+		fmt.Println(res)
+		q := startingCoords
+		for len(q) > 0 {
+			cur := q[0]
+			q = q[1:]
+			res[cur[0]][cur[1]] = true
+			for _, d := range [][]int{{1, 0}, {0, 1}, {-1, 0}, {0, -1}} {
+				cNew := coord{d[0] + cur[0], d[1] + cur[1]}
+				valid := cNew[0] >= 0 && cNew[1] >= 0 && cNew[0] < len(heights) && cNew[1] < len(heights[0])
+				if valid && heights[cNew[0]][cNew[1]] >= heights[cur[0]][cur[1]] {
+					q = append(q, cNew)
+				}
+			}
+		}
+		return res
 	}
-	return heights
+	// bfs from left & top (Pac)
+	startPac := make([]coord, 0)
+	startAtl := make([]coord, 0)
+	for r := range rowLen {
+		startPac = append(startPac, coord{r, 0})
+		startAtl = append(startAtl, coord{r, colLen - 1})
+	}
+	for c := range colLen {
+		startPac = append(startPac, coord{c, 0})
+		startAtl = append(startAtl, coord{rowLen - 1, c})
+	}
+	// bfs from right & bottom (Atl)
+	pacMap := bfs(startPac)
+	atlMap := bfs(startAtl)
+	res := make([][]int, 0)
+	for i := range pacMap {
+		for j := range pacMap {
+			if pacMap[i][j] && atlMap[i][j] {
+				res = append(res, []int{i, j})
+			}
+		}
+	}
+	return res
 }
