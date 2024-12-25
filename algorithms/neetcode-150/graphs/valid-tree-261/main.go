@@ -10,5 +10,28 @@ func main() {
 }
 
 func validTree(n int, edges [][]int) bool {
-	return n > len(edges)
+	if n == 0 {
+		return true
+	}
+	adjList := make(map[int][]int)
+	for _, e := range edges {
+		adjList[e[0]] = append(adjList[e[0]], e[1])
+		adjList[e[1]] = append(adjList[e[1]], e[0])
+	}
+	var dfs func(i int, prev int) bool
+	visit := make(map[int]bool)
+	dfs = func(i, prev int) bool {
+		if visit[i] {
+			return false
+		}
+		visit[i] = true
+		for _, nextI := range adjList[i] {
+			if nextI != prev && !dfs(nextI, i) {
+				return false
+			}
+		}
+		visit[i] = false
+		return true
+	}
+	return dfs(0, -1) && len(visit) == n
 }
