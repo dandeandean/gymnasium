@@ -40,7 +40,9 @@ func findItinerary(tickets [][]string) []string {
 			if dfs(str) {
 				return true
 			}
+			res = append(res, str)
 		}
+		return false
 	}
 	dfs("JFK")
 
