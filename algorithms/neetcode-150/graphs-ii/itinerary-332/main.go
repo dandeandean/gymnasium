@@ -30,12 +30,14 @@ func findItinerary(tickets [][]string) []string {
 		if len(res) == len(tickets)+1 {
 			return true
 		}
-		if _, ok := aList[w]; !ok {
+
+		nextPlaces, ok := aList[w]
+		if !ok {
 			return false
 		}
 
-		temp := make([]string, len(aList[w]))
-		copy(temp, aList[w])
+		temp := make([]string, len(nextPlaces))
+		copy(temp, nextPlaces)
 
 		for i, str := range temp {
 			aList[w] = append(aList[w][0:i], aList[w][i+1:]...)
