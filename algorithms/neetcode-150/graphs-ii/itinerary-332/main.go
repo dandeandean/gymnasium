@@ -25,10 +25,23 @@ func findItinerary(tickets [][]string) []string {
 		sort.Sort(sort.Reverse(sort.StringSlice(aList[k])))
 	}
 	res := make([]string, 0)
-	stack := []string{"JFK"}
-	for len(stack) > 0 {
-		cur := stack[len(stack)-1]
-		res = append(res, cur)
+	var dfs func(string)
+	dfs = func(s string) {
+		for len(aList[s]) > 0 {
+			last := aList[s][len(aList[s])-1]
+			aList[s] = aList[s][:len(aList[s])-1]
+			dfs(last)
+		}
+		res = append(res, s)
+	}
+	dfs("JFK")
+	for i, s := range res {
+		temp := s
+		res[i] = res[len(res)-1-i]
+		res[len(res)-1-i] = temp
+		if i == (len(res)-1)/2 {
+			break
+		}
 	}
 	return res
 }
