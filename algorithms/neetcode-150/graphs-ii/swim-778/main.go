@@ -24,17 +24,19 @@ func (h *MinHeap) Pop() interface{} {
 }
 
 func swimInWater(grid [][]int) int {
+	bounds := len(grid)
 	h := &MinHeap{cell{x: 0, y: 0, t: grid[0][0]}}
 	heap.Init(h)
 	beenTo := make(map[[2]int]bool)
+	beenTo[[2]int{0, 0}] = true
 	for h.Len() > 0 {
 		cur := heap.Pop(h).(cell)
-		if cur.x == len(grid)-1 && cur.y == len(grid)-1 {
+		if cur.x == bounds-1 && cur.y == bounds-1 {
 			return cur.t
 		}
 		for _, d := range [][]int{{0, 1}, {1, 0}, {0, -1}, {-1, 0}} {
 			newCell := cell{x: cur.x + d[0], y: cur.y + d[1]}
-			outOfBounds := newCell.x >= len(grid) || newCell.y >= len(grid) || newCell.y < 0 || newCell.x < 0
+			outOfBounds := newCell.x >= bounds || newCell.y >= bounds || newCell.y < 0 || newCell.x < 0
 			if outOfBounds || beenTo[[2]int{newCell.x, newCell.y}] {
 				continue
 			}
