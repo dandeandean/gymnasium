@@ -1,5 +1,10 @@
 package main
 
+import (
+	"container/heap"
+	"fmt"
+)
+
 type cell struct {
 	x, y, t int
 }
@@ -19,5 +24,32 @@ func (h *MinHeap) Pop() interface{} {
 }
 
 func swimInWater(grid [][]int) int {
-	return grid[0][0]
+	h := &MinHeap{cell{x: 0, y: 0, t: grid[0][0]}}
+	heap.Init(h)
+	beenTo := make(map[[2]int]bool)
+	for h.Len() > 0 {
+		cur := heap.Pop(h).(cell)
+		if cur.x == len(grid)-1 && cur.y == len(grid)-1 {
+			return cur.t
+		}
+		for _, d := range [][]int{{0, 1}, {1, 0}, {0, -1}, {-1, 0}} {
+			newCell := cell{x: cur.x + d[0], y: cur.y + d[1]}
+			outOfBounds := newCell.x >= len(grid) || newCell.y >= len(grid) || newCell.y < 0 || newCell.x < 0
+			if outOfBounds || beenTo[[2]int{newCell.x, newCell.y}] {
+				continue
+			}
+			beenTo[[2]int{newCell.x, newCell.y}] = true
+			newCell.t = grid[newCell.x][newCell.y]
+			if cur.t > newCell.t {
+				newCell.t = cur.t
+			}
+			heap.Push(h, newCell)
+		}
+	}
+	return -1
+}
+
+func main() {
+	g := [][]int{{0, 1, 2, 3, 4}, {24, 23, 22, 21, 5}, {12, 13, 14, 15, 16}, {11, 17, 18, 19, 20}, {10, 9, 8, 7, 6}}
+	fmt.Println(swimInWater(g))
 }
