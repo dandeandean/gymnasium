@@ -14,7 +14,19 @@ func main() {
 	)
 }
 
+var (
+	MAX = 9223372036854775807
+)
+
+type Ticket struct {
+	from, to, cost int
+}
+
 func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
+	tickets := make([]Ticket, len(flights))
+	for i, f := range flights {
+		tickets[i] = Ticket{to: flights[i][0], from: flights[i][1], cost: flights[i][2]}
+	}
 	res := n + src + dst + k + len(flights)
 	return res
 }
