@@ -3,50 +3,45 @@ package main
 import "fmt"
 
 func main() {
-	test1 := []string{"hrn", "hrf", "er", "enn", "rfnn"}
-	test2 := []string{"z", "o"}
+	test0 := []string{"wrt", "wrf", "er", "ett", "rftt"}
+	// test1 := []string{"hrn", "hrf", "er", "enn", "rfnn"}
+	// test2 := []string{"z", "o"}
 	fmt.Println(
-		AlienDictinary(test1),
-		AlienDictinary(test2),
+		AlienDictinary(test0),
+		// AlienDictinary(test1),
+		// AlienDictinary(test2),
 	)
 }
 
+func wordCmp(w1, w2 string) int {
+	shorterWord, longerWord := &w1, &w2
+	if len(w2) < len(w1) {
+		shorterWord, longerWord = &w2, &w1
+	}
+	i := 0
+	for i < len(*shorterWord) {
+		if w1[i] != w2[i] {
+			return i
+		}
+		i++
+	}
+	if i < len(*longerWord) {
+		return i
+	}
+	return -1
+}
+
 func AlienDictinary(words []string) string {
-	// return their lexographical ordering
-	// to reprsent an adj list
-	comesB4 := make(map[byte]map[byte]bool)
-	for _, w := range words {
-		for _, r := range w {
-			comesB4[byte(r)] = make(map[byte]bool)
-		}
-	}
-
+	order := make(map[byte]byte)
 	for i := range len(words) - 1 {
-		w1, w2 := words[i], words[i+1]
-		smallerLen := len(w1)
-		if len(w2) < smallerLen {
-			smallerLen = len(w2)
-		}
-		if len(w1) > len(w2) && w1[:smallerLen] == w2[:smallerLen] {
-			return ""
-		}
-		for j := range smallerLen {
-			if w1[j] != w2[j] {
-				comesB4[w1[j]][w2[j]] = true
-				break
-			}
-		}
+		w0, w1 := words[i], words[i+1]
+		deltaW := wordCmp(w0, w1)
+		fmt.Println(w0, w1, string(w0[deltaW]), "->", string(w1[deltaW]))
+		order[w0[deltaW]] = w1[deltaW]
 	}
-
-	visited := make(map[byte]bool)
-	var dfs func(c byte) bool
-	dfs = func(c byte) bool {
-		if visited[c] {
-			return visited[c]
-		}
-		visited[c] = true
-		return true
+	var posOrderDfs func(i int)
+	posOrderDfs = func(i int) {
+		return
 	}
-	dfs(words[0][0])
-	return words[0]
+	return "abc"
 }
