@@ -14,19 +14,30 @@ func main() {
 	)
 }
 
-var (
-	MAX = 9223372036854775807
-)
-
-type Ticket struct {
-	from, to, cost int
-}
-
 func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
-	tickets := make([]Ticket, len(flights))
-	for i, f := range flights {
-		tickets[i] = Ticket{to: flights[i][0], from: flights[i][1], cost: flights[i][2]}
+	MAX := 9223372036854775807
+	prices := make([]int, n)
+	for i := range n {
+		if i == src {
+			continue
+		}
+		prices[i] = MAX
 	}
-	res := n + src + dst + k + len(flights)
-	return res
+	for range k + 1 {
+		// IDK why we can't make pCopy outside of this loop
+		pCopy := make([]int, n)
+		copy(pCopy, prices)
+		for _, f := range flights {
+			src, dst, cost := f[0], f[1], f[2]
+			if prices[src] != MAX &&
+				prices[src]+cost < pCopy[dst] {
+				pCopy[dst] = prices[src] + cost
+			}
+		}
+		prices = pCopy
+	}
+	if prices[dst] == MAX {
+		prices[dst] = -1
+	}
+	return prices[dst]
 }
