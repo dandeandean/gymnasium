@@ -9,12 +9,15 @@ func reverse(x int) int {
 		x = -x
 		flipped = -1
 	}
-	MAX := 2147483648 - 1
+	MAX := 2147483648
+	if flipped == 1 {
+		MAX -= 1
+	}
 	for x > 0 {
 		lastDig := x % 10
 		out *= 10
 		out += lastDig
-		if out > MAX-flipped {
+		if out > MAX {
 			return 0
 		}
 		x = x / 10
